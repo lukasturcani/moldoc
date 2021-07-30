@@ -13,7 +13,6 @@ Welcome to moldoc-test's documentation!
 
 .. moldoc::
 
-
     import moldoc.molecule as molecule
 
     moldoc_display_molecule = molecule.Molecule(
@@ -29,6 +28,24 @@ Welcome to moldoc-test's documentation!
             molecule.Bond(2, 3, 1),
         ),
     )
+
+.. moldoc::
+
+    import moldoc.molecule as molecule
+
+    moldoc_display_molecule = molecule.Molecule(
+        atoms=(
+            molecule.Atom(7, (i, 0., 0.))
+            for i in range(4)
+        ),
+        bonds=(
+            molecule.Bond(0, 1, 1),
+            molecule.Bond(1, 2, 1),
+            molecule.Bond(2, 3, 1),
+        ),
+    )
+
+
 
 
 

@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import os
 from docutils import nodes
-from docutils.parsers.rst import Directive
+from sphinx.util.docutils import SphinxDirective
 import pkgutil
 
 from typing import Iterable
@@ -10,23 +10,34 @@ from .molecule import Atom, Bond, Molecule
 
 
 class MolDocNode(nodes.Body, nodes.Element):
-    def __init__(self, molecule: Molecule) -> None:
+    def __init__(
+        self,
+        moldoc_name: str,
+        molecule: Molecule,
+    ) -> None:
+
         super().__init__()
+        self._moldoc_name = moldoc_name
         self._molecule = molecule
 
     def get_molecule(self) -> Molecule:
         return self._molecule
 
+    def get_moldoc_name(self) -> str:
+        return self._moldoc_name
 
-class MolDoc(Directive):
+
+class MolDoc(SphinxDirective):
     has_content = True
 
     def run(self):
         content = '\n'.join(self.content)
-        locals_ = {}
         globals_ = {}
-        exec(content, globals_, locals_)
-        node = MolDocNode(locals_['moldoc_display_molecule'])
+        exec(content, globals_)
+        node = MolDocNode(
+            moldoc_name=f'moldoc_{self.env.new_serialno("moldoc")}',
+            molecule=globals_['moldoc_display_molecule'],
+        )
         return [node]
 
 
@@ -41,7 +52,7 @@ def _atoms_to_javascript(
 ) -> str:
 
     atoms = ','.join(map(_atom_to_javascript, atoms))
-    return f'const atoms = [{atoms}];'
+    return f'atoms = [{atoms}];'
 
 
 def _bond_to_javascript(bond: Bond) -> str:
@@ -58,38 +69,47 @@ def _bonds_to_javascript(
 ) -> str:
 
     bonds = ','.join(map(_bond_to_javascript, bonds))
-    return f'const bonds = [{bonds}];'
+    return f'bonds = [{bonds}];'
 
 
 def html_moldoc(self, node: MolDocNode):
     molecule = node.get_molecule()
+    moldoc_node_id = node.get_moldoc_name()
 
-    render = r'''
-        if (md.isLeft(maybeMolecule))
-        {
-            console.log('There was an issue with your molecule.');
-            console.log(md.fromLeft()(maybeMolecule));
-        }
-        else
-        {
-            const molecule = md.fromRight()(maybeMolecule);
-            const scene = md.scene({ containerId: 'moldoc' });
-            const meshes = md.meshes({})(molecule);
-            md.drawMol(scene(meshes));
-        }'''
+    if not getattr(self, 'moldoc_scripts_added', False):
+        self.body.append(
+            '<script src="_static/three.min.js"></script>'
+            '<script src="_static/molDraw.js"></script>'
+            '<script>const md = molDraw;'
+            'let atoms = [];'
+            'let bonds = [];'
+            'let maybeMolecule = undefined;'
+            '</script>'
+        )
+        self.moldoc_scripts_added = True
 
     content = f'''
-        const md = molDraw;
         {_atoms_to_javascript(molecule.get_atoms())}
         {_bonds_to_javascript(molecule.get_bonds())}
-        const maybeMolecule = md.maybeMolecule(atoms)(bonds);
-        {render}
+        maybeMolecule = md.maybeMolecule(atoms)(bonds);
+        if (md.isLeft(maybeMolecule))
+        {{
+            console.log('There was an issue with your molecule.');
+            console.log(md.fromLeft()(maybeMolecule));
+        }}
+        else
+        {{
+            const molecule = md.fromRight()(maybeMolecule);
+            const scene = md.scene(
+                {{ containerId: '{moldoc_node_id}' }}
+            );
+            const meshes = md.meshes({{}})(molecule);
+            md.drawMol(scene(meshes));
+        }}
     '''
 
     self.body.append(
-        '<script src="_static/three.min.js"></script>'
-        '<script src="_static/molDraw.js"></script>'
-        '<div id="moldoc" style="height:25vh;"></div>'
+        f'<div id="{moldoc_node_id}" style="height:25vh;"></div>'
         f'<script>{content}</script>'
     )
     raise nodes.SkipNode
