@@ -107,3 +107,31 @@ or in your Python docstrings
 Note that the content in the ``moldoc`` directive is a just a Python
 script, which has to define a ``moldoc_display_molecule`` variable
 holding a ``moldoc.molecule.Molecule`` instance.
+
+Because the content of a ``moldoc`` directive is just a Python script
+you can define your molecules programatically
+
+.. code-block:: python
+
+    def some_fn():
+        """
+        Do something.
+
+        .. moldoc::
+
+            # The content of a moldoc directive is just a Python script
+            # which needs to define a moldoc_display_molecule variable.
+
+            import moldoc.molecule as molecule
+
+            atoms = [molecule.Atom(6, (i, 0., 0.)) for i in range(10)]
+            bonds = [molecule.Bond(i-1, i, 1) for i in range(1, 10)]
+
+            moldoc_display_molecule = molecule.Molecule(
+                atoms=atoms,
+                bonds=bonds,
+            )
+
+        """
+
+        print('In some_fn()')

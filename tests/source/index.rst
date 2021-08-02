@@ -71,6 +71,22 @@ Welcome to moldoc-test's documentation!
     )
 
 
+.. moldoc::
+
+    # The content of a moldoc directive is just a Python script
+    # which needs to define a moldoc_display_molecule variable.
+
+    import moldoc.molecule as molecule
+
+    atoms = [molecule.Atom(6, (i, 0., 0.)) for i in range(10)]
+    bonds = [molecule.Bond(i-1, i, 1) for i in range(1, 10)]
+
+    moldoc_display_molecule = molecule.Molecule(
+        atoms=atoms,
+        bonds=bonds,
+    )
+
+
 Indices and tables
 ==================
 
