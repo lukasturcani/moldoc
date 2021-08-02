@@ -23,7 +23,7 @@ First, run
     pip install moldoc
 
 
-and then add it your extension in ``conf.py``
+and then add it to your extensions in ``conf.py``
 
 .. code-block:: python
 
@@ -41,8 +41,8 @@ which you  can place it into your ``rst`` files
 
 .. code-block:: rst
 
-   .. code-block:: rst
 
+    .. moldoc::
 
         # The content of a moldoc directive is just a Python script
         # which needs to define a moldoc_display_molecule variable.
