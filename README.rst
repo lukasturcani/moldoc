@@ -64,7 +64,6 @@ which you  can place it into your ``rst`` files
                 molecule.Bond(0, 2, 1),
                 molecule.Bond(0, 3, 1),
                 molecule.Bond(0, 4, 1),
-                molecule.Bond(0, 5, 1),
             ),
         )
 
@@ -98,7 +97,6 @@ or in your Python docstrings
                     molecule.Bond(0, 2, 1),
                     molecule.Bond(0, 3, 1),
                     molecule.Bond(0, 4, 1),
-                    molecule.Bond(0, 5, 1),
                 ),
             )
 
