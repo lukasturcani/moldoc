@@ -54,8 +54,8 @@ def html_moldoc(self, node: MolDocNode):
 
     if not getattr(self, 'moldoc_scripts_added', False):
         self.body.append(
-            '<script src="_static/three.min.js"></script>'
-            '<script src="_static/molDraw.js"></script>'
+            '<script src="/_static/three.min.js"></script>'
+            '<script src="/_static/molDraw.js"></script>'
             '<script>const md=molDraw;'
             'let atoms=[];'
             'let bonds=[];'
