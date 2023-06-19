@@ -16,7 +16,7 @@ jobs:
         with:
           python-version: "3.11"
           cache: "pip"
-      - run: "pip install '.[dev]'"
+      - run: "pip install -e '.[dev]'"
       - run: ruff .
 
   mypy:
@@ -27,7 +27,7 @@ jobs:
         with:
           python-version: "3.11"
           cache: "pip"
-      - run: "pip install '.[dev]'"
+      - run: "pip install -e '.[dev]'"
       - run: mypy .
 
   black:
@@ -38,7 +38,7 @@ jobs:
         with:
           python-version: "3.11"
           cache: "pip"
-      - run: "pip install '.[dev]'"
+      - run: "pip install -e '.[dev]'"
       - run: black --check .
 
   examples:
@@ -49,5 +49,5 @@ jobs:
         with:
           python-version: "3.11"
           cache: "pip"
-      - run: "pip install '.[dev]'"
+      - run: "pip install -e '.[dev]'"
       - run: make -C tests html
