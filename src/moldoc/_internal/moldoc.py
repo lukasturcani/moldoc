@@ -7,10 +7,10 @@ from sphinx.application import Sphinx
 from sphinx.util.docutils import SphinxDirective
 from sphinx.writers.html5 import HTML5Translator
 
-from moldoc.javascript.atoms import get_atom_array
-from moldoc.javascript.bonds import get_bond_array
-from moldoc.javascript.mesh_config import get_mesh_config
-from moldoc.javascript.scene_config import get_scene_config
+from moldoc._internal.javascript.atoms import get_atom_array
+from moldoc._internal.javascript.bonds import get_bond_array
+from moldoc._internal.javascript.mesh_config import get_mesh_config
+from moldoc._internal.javascript.scene_config import get_scene_config
 from moldoc.molecule import Molecule
 from moldoc.version import __version__
 

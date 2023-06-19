@@ -1,7 +1,7 @@
 from typing import Iterable, Optional
 
-from moldoc.javascript.color import color_to_javascript
-from moldoc.javascript.material import material_to_javascript
+from moldoc._internal.javascript.color import color_to_javascript
+from moldoc._internal.javascript.material import material_to_javascript
 from moldoc.molecule import Atom, Molecule, MoleculeConfig
 
 

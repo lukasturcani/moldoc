@@ -1,7 +1,7 @@
 from typing import Optional
 
-from moldoc.javascript.bool import bool_to_javascript
-from moldoc.javascript.color import color_to_javascript
+from moldoc._internal.javascript.bool import bool_to_javascript
+from moldoc._internal.javascript.color import color_to_javascript
 from moldoc.molecule import MoleculeConfig
 
 

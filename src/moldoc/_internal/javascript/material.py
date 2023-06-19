@@ -1,6 +1,6 @@
 from typing import Optional, TypeVar
 
-from moldoc.javascript.bool import bool_to_javascript
+from moldoc._internal.javascript.bool import bool_to_javascript
 from moldoc.molecule import (
     Material,
     MeshLambertMaterial,
