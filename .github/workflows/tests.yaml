@@ -38,6 +38,7 @@ jobs:
         with:
           python-version: "3.11"
           cache: "pip"
+      - run: "pip install '.[dev]'"
       - run: black --check .
 
   examples:
@@ -48,4 +49,5 @@ jobs:
         with:
           python-version: "3.11"
           cache: "pip"
+      - run: "pip install '.[dev]'"
       - run: make -C tests html
