@@ -1,19 +1,18 @@
-from __future__ import annotations
-
 import os
-from docutils import nodes
-from sphinx.util.docutils import SphinxDirective
 import pkgutil
+import typing
 
-from .molecule import (
-    Molecule,
-)
-from .javascript import (
-    get_atom_array,
-    get_bond_array,
-    get_scene_config,
-    get_mesh_config,
-)
+from docutils import nodes
+from sphinx.application import Sphinx
+from sphinx.util.docutils import SphinxDirective
+from sphinx.writers.html5 import HTML5Translator
+
+from moldoc.javascript.atoms import get_atom_array
+from moldoc.javascript.bonds import get_bond_array
+from moldoc.javascript.mesh_config import get_mesh_config
+from moldoc.javascript.scene_config import get_scene_config
+from moldoc.molecule import Molecule
+from moldoc.version import __version__
 
 
 class MolDocNode(nodes.Body, nodes.Element):
@@ -22,7 +21,6 @@ class MolDocNode(nodes.Body, nodes.Element):
         moldoc_name: str,
         molecule: Molecule,
     ) -> None:
-
         super().__init__()
         self._moldoc_name = moldoc_name
         self._molecule = molecule
@@ -37,84 +35,87 @@ class MolDocNode(nodes.Body, nodes.Element):
 class MolDoc(SphinxDirective):
     has_content = True
 
-    def run(self):
-        content = '\n'.join(self.content)
-        globals_ = {}
+    def run(self) -> list[MolDocNode]:
+        content = "\n".join(self.content)
+        globals_: dict[str, typing.Any] = {}
         exec(content, globals_)
         node = MolDocNode(
             moldoc_name=f'moldoc_{self.env.new_serialno("moldoc")}',
-            molecule=globals_['moldoc_display_molecule'],
+            molecule=globals_["moldoc_display_molecule"],
         )
         return [node]
 
 
-def html_moldoc(self, node: MolDocNode):
+def html_moldoc(self: HTML5Translator, node: MolDocNode) -> None:
     molecule = node.get_molecule()
     moldoc_node_id = node.get_moldoc_name()
 
-    if not getattr(self, 'moldoc_scripts_added', False):
+    if not getattr(self, "moldoc_scripts_added", False):
         self.body.append(
             '<script src="/_static/three.min.js"></script>'
             '<script src="/_static/molDraw.js"></script>'
-            '<script>const md=molDraw;'
-            'let atoms=[];'
-            'let bonds=[];'
-            'let maybeMolecule=undefined;'
-            '</script>'
+            "<script>const md=molDraw;"
+            "let atoms=[];"
+            "let bonds=[];"
+            "let maybeMolecule=undefined;"
+            "</script>"
         )
         self.moldoc_scripts_added = True
 
     content = (
-        f'atoms={get_atom_array(molecule.get_atoms())};'
-        f'bonds={get_bond_array(molecule.get_bonds())};'
-        'maybeMolecule=md.maybeMolecule(atoms)(bonds);'
-        'if (md.isLeft(maybeMolecule))'
-        '{'
+        f"atoms={get_atom_array(molecule.get_atoms())};"
+        f"bonds={get_bond_array(molecule.get_bonds())};"
+        "maybeMolecule=md.maybeMolecule(atoms)(bonds);"
+        "if (md.isLeft(maybeMolecule))"
+        "{"
         'console.log("There was an issue with your molecule.");'
-        'console.log(md.fromLeft()(maybeMolecule));'
-        '}'
-        'else'
-        '{'
-        'const molecule=md.fromRight()(maybeMolecule);'
-        'const scene=md.scene({'
-        f'{get_scene_config(moldoc_node_id, molecule.get_config())}'
-        '});'
-        'const meshes=md.meshes({'
-        f'{get_mesh_config(molecule)}'
-        '})(molecule);'
-        'md.drawMol(scene(meshes));'
-        '}'
+        "console.log(md.fromLeft()(maybeMolecule));"
+        "}"
+        "else"
+        "{"
+        "const molecule=md.fromRight()(maybeMolecule);"
+        "const scene=md.scene({"
+        f"{get_scene_config(moldoc_node_id, molecule.get_config())}"
+        "});"
+        "const meshes=md.meshes({"
+        f"{get_mesh_config(molecule)}"
+        "})(molecule);"
+        "md.drawMol(scene(meshes));"
+        "}"
     )
 
     self.body.append(
         f'<div id="{moldoc_node_id}" style="height:25vh;"></div>'
-        f'<script>{content}</script>'
+        f"<script>{content}</script>"
     )
     raise nodes.SkipNode
 
 
-def copy_asset_files(app, exc) -> None:
+def copy_asset_files(app: Sphinx, exc: Exception | None) -> None:
     asset_files = (
-        'molDraw.js',
-        'three.min.js',
+        "molDraw.js",
+        "three.min.js",
     )
-    static_dir = os.path.join(app.builder.outdir, '_static')
+    static_dir = os.path.join(app.builder.outdir, "_static")
     # Build is HTML and succeeded.
-    if app.builder.format == 'html' and exc is None:
+    if app.builder.format == "html" and exc is None:
         for path in asset_files:
-            with open(os.path.join(static_dir, path), 'wb') as f:
-                f.write(pkgutil.get_data(__package__, path))
+            with open(os.path.join(static_dir, path), "wb") as f:
+                if (data := pkgutil.get_data(__package__, path)) is not None:
+                    f.write(data)
+                else:
+                    raise RuntimeError(f"{path} not found")
 
 
-def setup(app):
-    app.connect('build-finished', copy_asset_files)
-    app.add_directive('moldoc', MolDoc)
+def setup(app: Sphinx) -> dict:
+    app.connect("build-finished", copy_asset_files)
+    app.add_directive("moldoc", MolDoc)
     app.add_node(
         node=MolDocNode,
         html=(html_moldoc, None),
     )
     return {
-        'version': '0.0.1',
-        'parallel_read_safe': True,
-        'parallel_write_safe': True,
+        "version": __version__,
+        "parallel_read_safe": True,
+        "parallel_write_safe": True,
     }

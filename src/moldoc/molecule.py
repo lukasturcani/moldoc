@@ -1,6 +1,4 @@
-from __future__ import annotations
-
-from typing import Iterable, Optional
+from typing import Iterable, Optional, TypeAlias
 
 
 class Color:
@@ -25,7 +23,6 @@ class AtomConfig:
         color: Optional[Color] = None,
         size: Optional[float] = None,
     ) -> None:
-
         self._color = color
         self._size = size
 
@@ -43,7 +40,6 @@ class Atom:
         position: tuple[float, float, float],
         config: Optional[AtomConfig] = None,
     ) -> None:
-
         self._atomic_number = atomic_number
         self._position = position
         self._config = config
@@ -65,7 +61,6 @@ class Bond:
         atom2_id: int,
         order: int,
     ) -> None:
-
         self._atom1_id = atom1_id
         self._atom2_id = atom2_id
         self._order = order
@@ -80,26 +75,21 @@ class Bond:
         return self._order
 
 
-class Material:
+class MeshLambertMaterial:
     pass
 
 
-class MeshLambertMaterial(Material):
+class MeshNormalMaterial:
     pass
 
 
-class MeshNormalMaterial(Material):
-    pass
-
-
-class MeshPhongMaterial(Material):
+class MeshPhongMaterial:
     def __init__(
         self,
         shininess: Optional[float] = None,
         reflectivity: Optional[float] = None,
         flat_shading: Optional[bool] = None,
     ) -> None:
-
         self._shininess = shininess
         self._reflectivity = reflectivity
         self._flat_shading = flat_shading
@@ -114,7 +104,7 @@ class MeshPhongMaterial(Material):
         return self._flat_shading
 
 
-class MeshPhysicalMaterial(Material):
+class MeshPhysicalMaterial:
     def __init__(
         self,
         clearcoat: Optional[float] = None,
@@ -124,7 +114,6 @@ class MeshPhysicalMaterial(Material):
         reflectivity: Optional[float] = None,
         flat_shading: Optional[bool] = None,
     ) -> None:
-
         self._clearcoat = clearcoat
         self._clearcoat_roughness = clearcoat_roughness
         self._roughness = roughness
@@ -151,14 +140,13 @@ class MeshPhysicalMaterial(Material):
         return self._flat_shading
 
 
-class MeshStandardMaterial(Material):
+class MeshStandardMaterial:
     def __init__(
         self,
         metalness: Optional[float] = None,
         roughness: Optional[float] = None,
         flat_shading: Optional[bool] = None,
     ) -> None:
-
         self._metalness = metalness
         self._roughness = roughness
         self._flat_shading = flat_shading
@@ -173,8 +161,13 @@ class MeshStandardMaterial(Material):
         return self._flat_shading
 
 
-class MeshToonMaterial(Material):
-    pass
+Material: TypeAlias = (
+    MeshLambertMaterial
+    | MeshNormalMaterial
+    | MeshPhongMaterial
+    | MeshPhysicalMaterial
+    | MeshStandardMaterial
+)
 
 
 class MoleculeConfig:
@@ -183,9 +176,8 @@ class MoleculeConfig:
         atom_scale: Optional[float] = None,
         material: Optional[Material] = None,
         background_color: Optional[Color] = None,
-        is_outlined: Optional[bool] = None
+        is_outlined: Optional[bool] = None,
     ) -> None:
-
         self._atom_scale = atom_scale
         self._material = material
         self._background_color = background_color
@@ -211,7 +203,6 @@ class Molecule:
         bonds: Iterable[Bond],
         config: Optional[MoleculeConfig] = None,
     ) -> None:
-
         self._atoms = tuple(atoms)
         self._bonds = tuple(bonds)
         self._config = config
