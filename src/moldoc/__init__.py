@@ -1,5 +1,3 @@
-__version__ = '0.0.4'
+from moldoc._internal.moldoc import setup
 
-from .moldoc import setup
-
-__all__ = ['setup']
+__all__ = ["setup"]
