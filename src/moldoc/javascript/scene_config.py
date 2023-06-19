@@ -17,8 +17,8 @@ def get_scene_config(
     return ",".join(f"{key}:{value}" for key, value in scene_config.items())
 
 
-def _get_scene_config(config: Optional[MoleculeConfig]) -> dict:
-    result = {}
+def _get_scene_config(config: Optional[MoleculeConfig]) -> dict[str, str]:
+    result: dict[str, str] = {}
 
     if config is None:
         return result
