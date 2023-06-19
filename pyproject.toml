@@ -19,6 +19,7 @@ dev = [
   "black",
   "ruff",
   "mypy",
+  "build",
   "twine",
   "types-docutils",
   "furo",
