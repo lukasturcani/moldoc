@@ -22,6 +22,9 @@ check:
   echo
   ( set -x; mypy . )
 
+  echo
+  ( set -x; make -C tests html )
+
   test $error = 0
 
 # Auto-fix code issues.
