@@ -7,6 +7,7 @@ from moldoc.molecule import Atom, Molecule, MoleculeConfig
 
 def get_mesh_config(
     molecule: Molecule,
+    molecule_config: MoleculeConfig | None,
 ) -> str:
     mesh_config = []
     atoms = molecule.get_atoms()
@@ -19,7 +20,6 @@ def get_mesh_config(
     if atom_color_function is not None:
         mesh_config.append(atom_color_function)
 
-    molecule_config = molecule.get_config()
     if molecule_config is not None:
         atom_scale = molecule_config.get_atom_scale()
         if atom_scale is not None:

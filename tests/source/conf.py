@@ -13,7 +13,7 @@
 # import os
 # import sys
 # sys.path.insert(0, os.path.abspath('.'))
-
+import moldoc.molecule as molecule
 
 # -- Project information -----------------------------------------------------
 
@@ -30,6 +30,10 @@ author = "Lukas Turcani"
 extensions = [
     "moldoc",
 ]
+
+moldoc_default_molecule_config = molecule.MoleculeConfig(
+    background_color=molecule.Color(32, 32, 32),
+)
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ["_templates"]

@@ -195,6 +195,32 @@ class MoleculeConfig:
     def is_outlined(self) -> Optional[bool]:
         return self._is_outlined
 
+    def update(self, other: "MoleculeConfig") -> "MoleculeConfig":
+        atom_scale = (
+            self._atom_scale
+            if other._atom_scale is None
+            else other._atom_scale
+        )
+        material = (
+            self._material if other._material is None else other._material
+        )
+        background_color = (
+            self._background_color
+            if other._background_color is None
+            else other._background_color
+        )
+        is_outlined = (
+            self._is_outlined
+            if other._is_outlined is None
+            else other._is_outlined
+        )
+        return MoleculeConfig(
+            atom_scale=atom_scale,
+            material=material,
+            background_color=background_color,
+            is_outlined=is_outlined,
+        )
+
 
 class Molecule:
     def __init__(
