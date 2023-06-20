@@ -140,6 +140,22 @@ you can define your molecules programatically
 Configuration
 =============
 
+Global
+------
+
+You can use the ``moldoc_default_molecule_config`` to set the default
+``MoleculeConfig`` value for all renderings. This is defined in ``conf.py``:
+
+.. code-block:: python
+
+  import moldoc.molecule as molecule
+  moldoc_default_molecule_config = molecule.MoleculeConfig(
+      background_color=molecule.Color(32, 32, 32),
+  )
+
+Local
+-----
+
 The display of molecules is pretty configurable, here is a snapshot of
 the different configuration options you have, but note that this is
 not an exhaustive list
