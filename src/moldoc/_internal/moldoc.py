@@ -11,7 +11,7 @@ from moldoc._internal.javascript.atoms import get_atom_array
 from moldoc._internal.javascript.bonds import get_bond_array
 from moldoc._internal.javascript.mesh_config import get_mesh_config
 from moldoc._internal.javascript.scene_config import get_scene_config
-from moldoc.molecule import Molecule
+from moldoc.molecule import Molecule, MoleculeConfig
 from moldoc.version import __version__
 
 
@@ -48,6 +48,13 @@ class MolDoc(SphinxDirective):
 
 def html_moldoc(self: HTML5Translator, node: MolDocNode) -> None:
     molecule = node.get_molecule()
+
+    default_molecule_config = self.config.moldoc_default_molecule_config
+    if (config := molecule.get_config()) is not None:
+        molecule_config = default_molecule_config.update(config)
+    else:
+        molecule_config = default_molecule_config
+
     moldoc_node_id = node.get_moldoc_name()
 
     if not getattr(self, "moldoc_scripts_added", False):
@@ -75,10 +82,10 @@ def html_moldoc(self: HTML5Translator, node: MolDocNode) -> None:
         "{"
         "const molecule=md.fromRight()(maybeMolecule);"
         "const scene=md.scene({"
-        f"{get_scene_config(moldoc_node_id, molecule.get_config())}"
+        f"{get_scene_config(moldoc_node_id, molecule_config)}"
         "});"
         "const meshes=md.meshes({"
-        f"{get_mesh_config(molecule)}"
+        f"{get_mesh_config(molecule, molecule_config)}"
         "})(molecule);"
         "md.drawMol(scene(meshes));"
         "}"
@@ -113,6 +120,12 @@ def setup(app: Sphinx) -> dict:
     app.add_node(
         node=MolDocNode,
         html=(html_moldoc, None),
+    )
+    app.add_config_value(
+        "moldoc_default_molecule_config",
+        MoleculeConfig(),
+        "html",
+        [MoleculeConfig],
     )
     return {
         "version": __version__,
