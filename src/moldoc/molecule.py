@@ -1,3 +1,5 @@
+"""Molecular rendering."""
+
 from moldoc._internal.molecule import (
     Atom,
     AtomConfig,

@@ -14,16 +14,20 @@ check:
   trap error=1 ERR
 
   echo
-  (set -x; ruff . )
+  (set -x; ruff check src/ tests/ )
+  test $? = 0
 
   echo
-  ( set -x; black --check . )
+  ( set -x; ruff format --check src/ tests/ )
+  test $? = 0
 
   echo
-  ( set -x; mypy . )
+  ( set -x; mypy src/ tests/ )
+  test $? = 0
 
   echo
   ( set -x; make -C tests html )
+  test $? = 0
 
   test $error = 0
 

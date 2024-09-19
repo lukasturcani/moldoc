@@ -1,4 +1,3 @@
-import os
 import pkgutil
 import typing
 
@@ -38,7 +37,7 @@ class MolDoc(SphinxDirective):
     def run(self) -> list[MolDocNode]:
         content = "\n".join(self.content)
         globals_: dict[str, typing.Any] = {}
-        exec(content, globals_)
+        exec(content, globals_)  # noqa: S102
         node = MolDocNode(
             moldoc_name=f'moldoc_{self.env.new_serialno("moldoc")}',
             molecule=globals_["moldoc_display_molecule"],
@@ -105,15 +104,16 @@ def copy_asset_files(app: Sphinx, exc: Exception | None) -> None:
         "molDraw.js",
         "three.min.js",
     )
-    static_dir = os.path.join(app.builder.outdir, "_static")
+    static_dir = app.builder.outdir / "_static"
     # Build is HTML and succeeded.
     if app.builder.format == "html" and exc is None:
         for path in asset_files:
-            with open(os.path.join(static_dir, path), "wb") as f:
+            with static_dir.joinpath(path).open("wb") as f:
                 if (data := pkgutil.get_data(__package__, path)) is not None:
                     f.write(data)
                 else:
-                    raise RuntimeError(f"{path} not found")
+                    msg = f"{path} not found"
+                    raise RuntimeError(msg)
 
 
 def setup(app: Sphinx) -> dict:

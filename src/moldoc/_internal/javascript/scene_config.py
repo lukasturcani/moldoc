@@ -1,5 +1,3 @@
-from typing import Optional
-
 from moldoc._internal.javascript.bool import bool_to_javascript
 from moldoc._internal.javascript.color import color_to_javascript
 from moldoc.molecule import MoleculeConfig
@@ -7,7 +5,7 @@ from moldoc.molecule import MoleculeConfig
 
 def get_scene_config(
     container_id: str,
-    molecule_config: Optional[MoleculeConfig],
+    molecule_config: MoleculeConfig | None,
 ) -> str:
     scene_config = {
         "containerId": f'"{container_id}"',
@@ -17,7 +15,7 @@ def get_scene_config(
     return ",".join(f"{key}:{value}" for key, value in scene_config.items())
 
 
-def _get_scene_config(config: Optional[MoleculeConfig]) -> dict[str, str]:
+def _get_scene_config(config: MoleculeConfig | None) -> dict[str, str]:
     result: dict[str, str] = {}
 
     if config is None:

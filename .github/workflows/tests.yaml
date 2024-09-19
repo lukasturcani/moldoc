@@ -17,7 +17,7 @@ jobs:
           python-version: "3.11"
           cache: "pip"
       - run: "pip install -e '.[dev]'"
-      - run: ruff .
+      - run: ruff check src/ tests/
 
   mypy:
     runs-on: ubuntu-22.04
@@ -28,9 +28,9 @@ jobs:
           python-version: "3.11"
           cache: "pip"
       - run: "pip install -e '.[dev]'"
-      - run: mypy .
+      - run: mypy src/ tests/
 
-  black:
+  ruff-format:
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v3
@@ -39,7 +39,7 @@ jobs:
           python-version: "3.11"
           cache: "pip"
       - run: "pip install -e '.[dev]'"
-      - run: black --check .
+      - run: ruff format --check src/ tests/
 
   examples:
     runs-on: ubuntu-22.04

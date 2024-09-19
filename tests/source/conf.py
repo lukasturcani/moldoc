@@ -10,15 +10,12 @@
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
-# import os
-# import sys
-# sys.path.insert(0, os.path.abspath('.'))
-import moldoc.molecule as molecule
+from moldoc import molecule
 
 # -- Project information -----------------------------------------------------
 
 project = "moldoc-test"
-copyright = "2021, Lukas Turcani"
+project_copyright = "2023, Lukas Turcani"
 author = "Lukas Turcani"
 
 

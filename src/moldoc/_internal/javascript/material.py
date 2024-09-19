@@ -1,4 +1,4 @@
-from typing import Optional, TypeVar
+from typing import TypeVar
 
 from moldoc._internal.javascript.bool import bool_to_javascript
 from moldoc.molecule import (
@@ -120,7 +120,7 @@ T = TypeVar("T")
 
 def _property_to_javascript(
     property_name: str,
-    property_value: Optional[T],
+    property_value: T | None,
 ) -> str:
     if property_value is None:
         return ""
