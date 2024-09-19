@@ -1,4 +1,5 @@
-from typing import Iterable, Optional, TypeAlias
+from collections.abc import Iterable
+from typing import TypeAlias
 
 
 class Color:
@@ -20,16 +21,16 @@ class Color:
 class AtomConfig:
     def __init__(
         self,
-        color: Optional[Color] = None,
-        size: Optional[float] = None,
+        color: Color | None = None,
+        size: float | None = None,
     ) -> None:
         self._color = color
         self._size = size
 
-    def get_color(self) -> Optional[Color]:
+    def get_color(self) -> Color | None:
         return self._color
 
-    def get_size(self) -> Optional[float]:
+    def get_size(self) -> float | None:
         return self._size
 
 
@@ -38,7 +39,7 @@ class Atom:
         self,
         atomic_number: int,
         position: tuple[float, float, float],
-        config: Optional[AtomConfig] = None,
+        config: AtomConfig | None = None,
     ) -> None:
         self._atomic_number = atomic_number
         self._position = position
@@ -50,7 +51,7 @@ class Atom:
     def get_position(self) -> tuple[float, float, float]:
         return self._position
 
-    def get_config(self) -> Optional[AtomConfig]:
+    def get_config(self) -> AtomConfig | None:
         return self._config
 
 
@@ -86,33 +87,33 @@ class MeshNormalMaterial:
 class MeshPhongMaterial:
     def __init__(
         self,
-        shininess: Optional[float] = None,
-        reflectivity: Optional[float] = None,
-        flat_shading: Optional[bool] = None,
+        shininess: float | None = None,
+        reflectivity: float | None = None,
+        flat_shading: bool | None = None,
     ) -> None:
         self._shininess = shininess
         self._reflectivity = reflectivity
         self._flat_shading = flat_shading
 
-    def get_shininess(self) -> Optional[float]:
+    def get_shininess(self) -> float | None:
         return self._shininess
 
-    def get_reflectivity(self) -> Optional[float]:
+    def get_reflectivity(self) -> float | None:
         return self._reflectivity
 
-    def get_flat_shading(self) -> Optional[bool]:
+    def get_flat_shading(self) -> bool | None:
         return self._flat_shading
 
 
 class MeshPhysicalMaterial:
-    def __init__(
+    def __init__(  # noqa: PLR0913
         self,
-        clearcoat: Optional[float] = None,
-        clearcoat_roughness: Optional[float] = None,
-        roughness: Optional[float] = None,
-        metalness: Optional[float] = None,
-        reflectivity: Optional[float] = None,
-        flat_shading: Optional[bool] = None,
+        clearcoat: float | None = None,
+        clearcoat_roughness: float | None = None,
+        roughness: float | None = None,
+        metalness: float | None = None,
+        reflectivity: float | None = None,
+        flat_shading: bool | None = None,
     ) -> None:
         self._clearcoat = clearcoat
         self._clearcoat_roughness = clearcoat_roughness
@@ -121,43 +122,43 @@ class MeshPhysicalMaterial:
         self._reflectivity = reflectivity
         self._flat_shading = flat_shading
 
-    def get_clearcoat(self) -> Optional[float]:
+    def get_clearcoat(self) -> float | None:
         return self._clearcoat
 
-    def get_clearcoat_roughness(self) -> Optional[float]:
+    def get_clearcoat_roughness(self) -> float | None:
         return self._clearcoat_roughness
 
-    def get_roughness(self) -> Optional[float]:
+    def get_roughness(self) -> float | None:
         return self._roughness
 
-    def get_metalness(self) -> Optional[float]:
+    def get_metalness(self) -> float | None:
         return self._metalness
 
-    def get_reflectivity(self) -> Optional[float]:
+    def get_reflectivity(self) -> float | None:
         return self._reflectivity
 
-    def get_flat_shading(self) -> Optional[bool]:
+    def get_flat_shading(self) -> bool | None:
         return self._flat_shading
 
 
 class MeshStandardMaterial:
     def __init__(
         self,
-        metalness: Optional[float] = None,
-        roughness: Optional[float] = None,
-        flat_shading: Optional[bool] = None,
+        metalness: float | None = None,
+        roughness: float | None = None,
+        flat_shading: bool | None = None,
     ) -> None:
         self._metalness = metalness
         self._roughness = roughness
         self._flat_shading = flat_shading
 
-    def get_metalness(self) -> Optional[float]:
+    def get_metalness(self) -> float | None:
         return self._metalness
 
-    def get_roughness(self) -> Optional[float]:
+    def get_roughness(self) -> float | None:
         return self._roughness
 
-    def get_flat_shading(self) -> Optional[bool]:
+    def get_flat_shading(self) -> bool | None:
         return self._flat_shading
 
 
@@ -173,46 +174,48 @@ Material: TypeAlias = (
 class MoleculeConfig:
     def __init__(
         self,
-        atom_scale: Optional[float] = None,
-        material: Optional[Material] = None,
-        background_color: Optional[Color] = None,
-        is_outlined: Optional[bool] = None,
+        atom_scale: float | None = None,
+        material: Material | None = None,
+        background_color: Color | None = None,
+        is_outlined: bool | None = None,
     ) -> None:
         self._atom_scale = atom_scale
         self._material = material
         self._background_color = background_color
         self._is_outlined = is_outlined
 
-    def get_atom_scale(self) -> Optional[float]:
+    def get_atom_scale(self) -> float | None:
         return self._atom_scale
 
-    def get_material(self) -> Optional[Material]:
+    def get_material(self) -> Material | None:
         return self._material
 
-    def get_background_color(self) -> Optional[Color]:
+    def get_background_color(self) -> Color | None:
         return self._background_color
 
-    def is_outlined(self) -> Optional[bool]:
+    def is_outlined(self) -> bool | None:
         return self._is_outlined
 
     def update(self, other: "MoleculeConfig") -> "MoleculeConfig":
         atom_scale = (
             self._atom_scale
-            if other._atom_scale is None
-            else other._atom_scale
+            if other.get_atom_scale() is None
+            else other.get_atom_scale()
         )
         material = (
-            self._material if other._material is None else other._material
+            self._material
+            if other.get_material() is None
+            else other.get_material()
         )
         background_color = (
             self._background_color
-            if other._background_color is None
-            else other._background_color
+            if other.get_background_color() is None
+            else other.get_background_color()
         )
         is_outlined = (
             self._is_outlined
-            if other._is_outlined is None
-            else other._is_outlined
+            if other.is_outlined() is None
+            else other.is_outlined()
         )
         return MoleculeConfig(
             atom_scale=atom_scale,
@@ -227,7 +230,7 @@ class Molecule:
         self,
         atoms: Iterable[Atom],
         bonds: Iterable[Bond],
-        config: Optional[MoleculeConfig] = None,
+        config: MoleculeConfig | None = None,
     ) -> None:
         self._atoms = tuple(atoms)
         self._bonds = tuple(bonds)
@@ -239,5 +242,5 @@ class Molecule:
     def get_bonds(self) -> tuple[Bond, ...]:
         return self._bonds
 
-    def get_config(self) -> Optional[MoleculeConfig]:
+    def get_config(self) -> MoleculeConfig | None:
         return self._config

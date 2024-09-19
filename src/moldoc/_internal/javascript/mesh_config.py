@@ -1,4 +1,4 @@
-from typing import Iterable, Optional
+from collections.abc import Iterable
 
 from moldoc._internal.javascript.color import color_to_javascript
 from moldoc._internal.javascript.material import material_to_javascript
@@ -34,7 +34,7 @@ def get_mesh_config(
 
 def _get_atom_size_function(
     atoms: Iterable[Atom],
-) -> Optional[str]:
+) -> str | None:
     atom_size_cases = tuple(_get_atom_size_cases(atoms))
     if atom_size_cases:
         return (
@@ -60,7 +60,7 @@ def _get_atom_size_cases(
 
 def _get_atom_color_function(
     atoms: Iterable[Atom],
-) -> Optional[str]:
+) -> str | None:
     atom_color_cases = tuple(_get_atom_color_cases(atoms))
     if atom_color_cases:
         return (
@@ -85,8 +85,8 @@ def _get_atom_color_cases(
 
 
 def _molecule_config_to_javascript(
-    config: Optional[MoleculeConfig],
-) -> Optional[str]:
+    config: MoleculeConfig | None,
+) -> str | None:
     if config is None:
         return None
 
