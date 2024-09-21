@@ -3,6 +3,7 @@ import typing
 
 from docutils import nodes
 from sphinx.application import Sphinx
+from sphinx.environment import BuildEnvironment
 from sphinx.util.docutils import SphinxDirective
 from sphinx.writers.html5 import HTML5Translator
 
@@ -42,6 +43,11 @@ class MolDoc(SphinxDirective):
             moldoc_name=f'moldoc_{self.env.new_serialno("moldoc")}',
             molecule=globals_["moldoc_display_molecule"],
         )
+
+        if not hasattr(self.env, "moldoc_documents"):
+            self.env.moldoc_documents = set()  # type: ignore[attr-defined]
+
+        self.env.moldoc_documents.add(self.env.docname)  # type: ignore[attr-defined]
         return [node]
 
 
@@ -57,23 +63,15 @@ def html_moldoc(self: HTML5Translator, node: MolDocNode) -> None:
     moldoc_node_id = node.get_moldoc_name()
 
     if not getattr(self, "moldoc_scripts_added", False):
-        self.body.append(
-            '<script src="./_static/three.min.js"></script>'
-            '<script src="./_static/molDraw.js"></script>'
-            '<script src="../_static/three.min.js"></script>'
-            '<script src="../_static/molDraw.js"></script>'
-            "<script>const md=molDraw;"
-            "let atoms=[];"
-            "let bonds=[];"
-            "let maybeMolecule=undefined;"
-            "</script>"
-        )
+        self.body.append("<script>let moldoc_molecules=[];</script>")
         self.moldoc_scripts_added = True
 
     content = (
-        f"atoms={get_atom_array(molecule.get_atoms())};"
-        f"bonds={get_bond_array(molecule.get_bonds())};"
-        "maybeMolecule=md.maybeMolecule(atoms)(bonds);"
+        "moldoc_molecules.push(() => {"
+        "const md = molDraw;"
+        f"let atoms={get_atom_array(molecule.get_atoms())};"
+        f"let bonds={get_bond_array(molecule.get_bonds())};"
+        "let maybeMolecule=md.maybeMolecule(atoms)(bonds);"
         "if (md.isLeft(maybeMolecule))"
         "{"
         'console.log("There was an issue with your molecule.");'
@@ -90,6 +88,7 @@ def html_moldoc(self: HTML5Translator, node: MolDocNode) -> None:
         "})(molecule);"
         "md.drawMol(scene(meshes));"
         "}"
+        "});"
     )
 
     self.body.append(
@@ -116,8 +115,48 @@ def copy_asset_files(app: Sphinx, exc: Exception | None) -> None:
                     raise RuntimeError(msg)
 
 
+def add_moldoc_scripts(
+    app: Sphinx,
+    pagename: str,
+    templatename: str,  # noqa: ARG001
+    context: dict[str, typing.Any],  # noqa: ARG001
+    doctree: nodes.document,  # noqa: ARG001
+) -> None:
+    if (
+        hasattr(app.env, "moldoc_documents")
+        and pagename in app.env.moldoc_documents
+    ):
+        app.add_js_file("three.min.js")
+        app.add_js_file("molDraw.js")
+        app.add_js_file(None, body="moldoc_molecules.forEach(f=>f());")
+
+
+def purge_moldoc_documents(
+    app: Sphinx,  # noqa: ARG001
+    env: BuildEnvironment,
+    docnames: list[str],
+) -> None:
+    if hasattr(env, "moldoc_documents"):
+        env.moldoc_documents.difference_update(docnames)
+
+
+def merge_moldoc_documents(
+    app: Sphinx,  # noqa: ARG001
+    env: BuildEnvironment,
+    docnames: list[str],  # noqa: ARG001
+    other: BuildEnvironment,
+) -> None:
+    if not hasattr(env, "moldoc_documents"):
+        env.moldoc_documents = set()  # type: ignore[attr-defined]
+    if hasattr(other, "moldoc_documents"):
+        env.moldoc_documents.update(other.moldoc_documents)  # type: ignore[attr-defined]
+
+
 def setup(app: Sphinx) -> dict:
     app.connect("build-finished", copy_asset_files)
+    app.connect("html-page-context", add_moldoc_scripts)
+    app.connect("env-purge-doc", purge_moldoc_documents)
+    app.connect("env-merge-info", merge_moldoc_documents)
     app.add_directive("moldoc", MolDoc)
     app.add_node(
         node=MolDocNode,
