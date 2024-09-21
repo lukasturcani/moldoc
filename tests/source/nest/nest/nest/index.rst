@@ -7,15 +7,8 @@ Welcome to moldoc-test's documentation!
 =======================================
 
 .. toctree::
-  :maxdepth: 2
-  :caption: Contents:
-
-  nest/index.rst
-  nest/foo.rst
-  nest/nest/index.rst
-  nest/nest/nest/index.rst
-  nest/nest/nest/nest/index.rst
-  nest/nest/nest/nest/nest/index.rst
+   :maxdepth: 2
+   :caption: Contents:
 
 
 .. moldoc::
