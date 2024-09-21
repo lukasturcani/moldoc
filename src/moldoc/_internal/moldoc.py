@@ -45,9 +45,9 @@ class MolDoc(SphinxDirective):
         )
 
         if not hasattr(self.env, "moldoc_documents"):
-            self.env.moldoc_documents = set()
+            self.env.moldoc_documents = set()  # type: ignore[attr-defined]
 
-        self.env.moldoc_documents.add(self.env.docname)
+        self.env.moldoc_documents.add(self.env.docname)  # type: ignore[attr-defined]
         return [node]
 
 
@@ -118,9 +118,9 @@ def copy_asset_files(app: Sphinx, exc: Exception | None) -> None:
 def add_moldoc_scripts(
     app: Sphinx,
     pagename: str,
-    templatename: str,
-    context: dict[str, typing.Any],
-    doctree: nodes.document,
+    templatename: str,  # noqa: ARG001
+    context: dict[str, typing.Any],  # noqa: ARG001
+    doctree: nodes.document,  # noqa: ARG001
 ) -> None:
     if (
         hasattr(app.env, "moldoc_documents")
@@ -132,7 +132,7 @@ def add_moldoc_scripts(
 
 
 def purge_moldoc_documents(
-    app: Sphinx,
+    app: Sphinx,  # noqa: ARG001
     env: BuildEnvironment,
     docnames: list[str],
 ) -> None:
@@ -141,15 +141,15 @@ def purge_moldoc_documents(
 
 
 def merge_moldoc_documents(
-    app: Sphinx,
+    app: Sphinx,  # noqa: ARG001
     env: BuildEnvironment,
-    docnames: list[str],
+    docnames: list[str],  # noqa: ARG001
     other: BuildEnvironment,
 ) -> None:
     if not hasattr(env, "moldoc_documents"):
-        env.moldoc_documents = set()
+        env.moldoc_documents = set()  # type: ignore[attr-defined]
     if hasattr(other, "moldoc_documents"):
-        env.moldoc_documents.update(other.moldoc_documents)
+        env.moldoc_documents.update(other.moldoc_documents)  # type: ignore[attr-defined]
 
 
 def setup(app: Sphinx) -> dict:
