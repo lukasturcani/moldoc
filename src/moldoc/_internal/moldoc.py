@@ -63,11 +63,11 @@ def html_moldoc(self: HTML5Translator, node: MolDocNode) -> None:
     moldoc_node_id = node.get_moldoc_name()
 
     if not getattr(self, "moldoc_scripts_added", False):
-        self.body.append("<script>let moldoc_molecule=[];</script>")
+        self.body.append("<script>let moldoc_molecules=[];</script>")
         self.moldoc_scripts_added = True
 
     content = (
-        "moldoc_molecule.push(() => {"
+        "moldoc_molecules.push(() => {"
         "const md = molDraw;"
         f"let atoms={get_atom_array(molecule.get_atoms())};"
         f"let bonds={get_bond_array(molecule.get_bonds())};"
@@ -128,7 +128,7 @@ def add_moldoc_scripts(
     ):
         app.add_js_file("three.min.js")
         app.add_js_file("molDraw.js")
-        app.add_js_file(None, body="moldoc_molecule.forEach(f=>f());")
+        app.add_js_file(None, body="moldoc_molecules.forEach(f=>f());")
 
 
 def purge_moldoc_documents(
