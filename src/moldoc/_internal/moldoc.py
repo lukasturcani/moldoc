@@ -67,7 +67,8 @@ def html_moldoc(self: HTML5Translator, node: MolDocNode) -> None:
         self.moldoc_scripts_added = True
 
     content = (
-        "moldoc_molecules.push(() => {"
+        "{"
+        "const drawMol = () => {"
         "const md = molDraw;"
         f"let atoms={get_atom_array(molecule.get_atoms())};"
         f"let bonds={get_bond_array(molecule.get_bonds())};"
@@ -88,7 +89,10 @@ def html_moldoc(self: HTML5Translator, node: MolDocNode) -> None:
         "})(molecule);"
         "md.drawMol(scene(meshes));"
         "}"
-        "});"
+        "};"
+        "if (typeof molDraw === 'undefined') { "
+        "moldoc_molecules.push(drawMol); } else { drawMol() }"
+        "}"
     )
 
     self.body.append(
