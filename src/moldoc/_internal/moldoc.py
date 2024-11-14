@@ -27,7 +27,11 @@ class MolDocNode(nodes.Body, nodes.Element):
 
 
 DEFAULT_SCRIPT = """
-let viewer = $3Dmol.createViewer(element);
+let config = {
+    backgroundAlpha: 0.0,
+    backgroundColor: 'transparent',
+};
+let viewer = $3Dmol.createViewer(element, config);
 let model = viewer.addModel(data, 'sdf');
 model.setStyle({}, {sphere: {scale: 0.33}});
 model.setStyle({}, {stick: {}}, true);
