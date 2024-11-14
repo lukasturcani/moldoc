@@ -74,9 +74,9 @@ def html_moldoc(self: HTML5Translator, node: MolDocNode) -> None:
     self.body.append(
         f'<div id="{node.moldoc_name}" {attributes}></div>'
         "<script>"
-        f"let element = document.querySelector('#{node.moldoc_name}');"
-        f"let data = {molecule_sdf};"
-        f"{node.script}</script>"
+        f"{{let element = document.querySelector('#{node.moldoc_name}');"
+        f"let data = `{molecule_sdf}`;"
+        f"{node.script}}}</script>"
     )
     raise nodes.SkipNode
 

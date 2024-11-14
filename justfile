@@ -33,6 +33,7 @@ check:
 
 # Build test docs
 test-docs:
+  rm -r ./tests/build
   uv run make -C tests html
   echo Your docs are in: $PWD/tests/build/html/index.html
 
