@@ -9,6 +9,7 @@ maintainers = [
 ]
 dependencies = [
   "sphinx",
+  "rdkit",
 ]
 requires-python = ">=3.12"
 dynamic = ["version"]

@@ -2,16 +2,12 @@ import pkgutil
 import typing
 
 from docutils import nodes
+from rdkit import Chem
 from sphinx.application import Sphinx
 from sphinx.environment import BuildEnvironment
 from sphinx.util.docutils import SphinxDirective
 from sphinx.writers.html5 import HTML5Translator
 
-from moldoc._internal.javascript.atoms import get_atom_array
-from moldoc._internal.javascript.bonds import get_bond_array
-from moldoc._internal.javascript.mesh_config import get_mesh_config
-from moldoc._internal.javascript.scene_config import get_scene_config
-from moldoc.molecule import Molecule, MoleculeConfig
 from moldoc.version import __version__
 
 
@@ -19,17 +15,15 @@ class MolDocNode(nodes.Body, nodes.Element):
     def __init__(
         self,
         moldoc_name: str,
-        molecule: Molecule,
+        molecule: Chem.Mol,
+        container: dict[str, str],
+        script: str,
     ) -> None:
         super().__init__()
-        self._moldoc_name = moldoc_name
-        self._molecule = molecule
-
-    def get_molecule(self) -> Molecule:
-        return self._molecule
-
-    def get_moldoc_name(self) -> str:
-        return self._moldoc_name
+        self.moldoc_name = moldoc_name
+        self.molecule = molecule
+        self.container = container
+        self.script = script
 
 
 class MolDoc(SphinxDirective):
@@ -42,6 +36,8 @@ class MolDoc(SphinxDirective):
         node = MolDocNode(
             moldoc_name=f'moldoc_{self.env.new_serialno("moldoc")}',
             molecule=globals_["moldoc_display_molecule"],
+            container=globals_.get("moldoc_container_attributes", {}),
+            script=globals_.get("moldoc_script", ""),
         )
 
         if not hasattr(self.env, "moldoc_documents"):
@@ -51,73 +47,36 @@ class MolDoc(SphinxDirective):
         return [node]
 
 
-def html_moldoc(self: HTML5Translator, node: MolDocNode) -> None:
-    molecule = node.get_molecule()
+def _format_attribute(key: str, value: str) -> str:
+    return f'{key}="{value}"'
 
-    default_molecule_config = self.config.moldoc_default_molecule_config
-    if (config := molecule.get_config()) is not None:
-        molecule_config = default_molecule_config.update(config)
-    else:
-        molecule_config = default_molecule_config
 
-    moldoc_node_id = node.get_moldoc_name()
-
-    if not getattr(self, "moldoc_scripts_added", False):
-        self.body.append("<script>let moldoc_molecules=[];</script>")
-        self.moldoc_scripts_added = True
-
-    content = (
-        "{"
-        "const drawMol = () => {"
-        "const md = molDraw;"
-        f"let atoms={get_atom_array(molecule.get_atoms())};"
-        f"let bonds={get_bond_array(molecule.get_bonds())};"
-        "let maybeMolecule=md.maybeMolecule(atoms)(bonds);"
-        "if (md.isLeft(maybeMolecule))"
-        "{"
-        'console.log("There was an issue with your molecule.");'
-        "console.log(md.fromLeft()(maybeMolecule));"
-        "}"
-        "else"
-        "{"
-        "const molecule=md.fromRight()(maybeMolecule);"
-        "const scene=md.scene({"
-        f"{get_scene_config(moldoc_node_id, molecule_config)}"
-        "});"
-        "const meshes=md.meshes({"
-        f"{get_mesh_config(molecule, molecule_config)}"
-        "})(molecule);"
-        "md.drawMol(scene(meshes));"
-        "}"
-        "};"
-        "if (typeof molDraw === 'undefined') { "
-        "moldoc_molecules.push(drawMol); } else { drawMol() }"
-        "}"
+def _format_attributes(attributes: dict[str, str]) -> str:
+    return " ".join(
+        _format_attribute(key, value) for key, value in attributes.items()
     )
 
+
+def html_moldoc(self: HTML5Translator, node: MolDocNode) -> None:
+    attributes = _format_attributes(node.container)
     self.body.append(
-        f'<div id="{moldoc_node_id}" style="height:25vh;"></div>'
-        f"<script>{content}</script>"
+        f'<div id="{node.moldoc_name}" {attributes}></div>'
+        f"<script>{node.script}</script>"
     )
     raise nodes.SkipNode
 
 
 def copy_asset_files(app: Sphinx, exc: Exception | None) -> None:
-    asset_files = (
-        "molDraw.js",
-        "three.min.js",
-        "3Dmol.min.js",
-    )
+    asset_file = "3Dmol.min.js"
     static_dir = app.builder.outdir / "_static"
     # Build is HTML and succeeded.
     if app.builder.format == "html" and exc is None:
-        for path in asset_files:
-            with static_dir.joinpath(path).open("wb") as f:
-                if (data := pkgutil.get_data(__package__, path)) is not None:
-                    f.write(data)
-                else:
-                    msg = f"{path} not found"
-                    raise RuntimeError(msg)
+        with static_dir.joinpath(asset_file).open("wb") as f:
+            if (data := pkgutil.get_data(__package__, asset_file)) is not None:
+                f.write(data)
+            else:
+                msg = f"{asset_file} not found"
+                raise RuntimeError(msg)
 
 
 def add_moldoc_scripts(
@@ -131,10 +90,7 @@ def add_moldoc_scripts(
         hasattr(app.env, "moldoc_documents")
         and pagename in app.env.moldoc_documents
     ):
-        app.add_js_file("three.min.js")
-        app.add_js_file("molDraw.js")
         app.add_js_file("3Dmol.min.js")
-        app.add_js_file(None, body="moldoc_molecules.forEach(f=>f());")
 
 
 def purge_moldoc_documents(
@@ -167,12 +123,6 @@ def setup(app: Sphinx) -> dict:
     app.add_node(
         node=MolDocNode,
         html=(html_moldoc, None),
-    )
-    app.add_config_value(
-        "moldoc_default_molecule_config",
-        MoleculeConfig(),
-        "html",
-        [MoleculeConfig],
     )
     return {
         "version": __version__,
