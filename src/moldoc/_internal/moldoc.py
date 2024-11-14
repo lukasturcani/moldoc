@@ -31,7 +31,8 @@ let config = {
     backgroundAlpha: 1.0,
 };
 let viewer = $3Dmol.createViewer(element, config);
-viewer.addModel(data, 'sdf')
+let model = viewer.addModel(data, 'sdf');
+model.setStyle({}, {stick: {}});
 viewer.zoomTo();
 viewer.render();
 """
@@ -47,7 +48,12 @@ class MolDoc(SphinxDirective):
         node = MolDocNode(
             moldoc_name=f'moldoc_{self.env.new_serialno("moldoc")}',
             molecule=globals_["moldoc_display_molecule"],
-            container=globals_.get("moldoc_container_attributes", {}),
+            container=globals_.get(
+                "moldoc_container_attributes",
+                {
+                    "style": "width: 60%; height: 400px; position: relative;",
+                },
+            ),
             script=globals_.get("moldoc_script", DEFAULT_SCRIPT),
         )
 
@@ -70,7 +76,7 @@ def _format_attributes(attributes: dict[str, str]) -> str:
 
 def html_moldoc(self: HTML5Translator, node: MolDocNode) -> None:
     attributes = _format_attributes(node.container)
-    molecule_sdf = Chem.MolToMolBlock(node.molecule)
+    molecule_sdf = Chem.MolToMolBlock(node.molecule, forceV3000=True)
     self.body.append(
         f'<div id="{node.moldoc_name}" {attributes}></div>'
         "<script>"
