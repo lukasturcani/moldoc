@@ -5,4 +5,3 @@ dist
 **/.cache
 src/moldoc/version.py
 tests/build
-uv.lock
