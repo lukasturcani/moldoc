@@ -4,7 +4,7 @@ default:
 
 # Do a dev install.
 dev:
-  pip install -e '.[dev]'
+  uv sync --all-extras --dev
 
 # Run code checks.
 check:
@@ -14,19 +14,19 @@ check:
   trap error=1 ERR
 
   echo
-  (set -x; ruff check src/ tests/ )
+  (set -x; uv run ruff check src/ tests/ )
   test $? = 0
 
   echo
-  ( set -x; ruff format --check src/ tests/ )
+  ( set -x; uv run ruff format --check src/ tests/ )
   test $? = 0
 
   echo
-  ( set -x; mypy src/ tests/ )
+  ( set -x; uv run mypy src/ tests/ )
   test $? = 0
 
   echo
-  ( set -x; make -C tests html )
+  ( set -x; uv run make -C tests html )
   test $? = 0
 
   test $error = 0

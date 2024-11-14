@@ -10,12 +10,12 @@ maintainers = [
 dependencies = [
   "sphinx",
 ]
-requires-python = ">=3.10"
+requires-python = ">=3.12"
 dynamic = ["version"]
 readme = "README.rst"
 description = "Make better chemistry documentation!"
 
-[project.optional-dependencies]
+[dependency-groups]
 dev = [
   "ruff",
   "mypy",
