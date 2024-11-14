@@ -27,12 +27,10 @@ class MolDocNode(nodes.Body, nodes.Element):
 
 
 DEFAULT_SCRIPT = """
-let config = {
-    backgroundAlpha: 1.0,
-};
-let viewer = $3Dmol.createViewer(element, config);
+let viewer = $3Dmol.createViewer(element);
 let model = viewer.addModel(data, 'sdf');
-model.setStyle({}, {stick: {}});
+model.setStyle({}, {sphere: {scale: 0.33}});
+model.setStyle({}, {stick: {}}, true);
 viewer.zoomTo();
 viewer.render();
 """
@@ -75,14 +73,23 @@ def _format_attributes(attributes: dict[str, str]) -> str:
 
 
 def html_moldoc(self: HTML5Translator, node: MolDocNode) -> None:
+    if not getattr(self, "moldoc_scripts_added", False):
+        self.body.append("<script>let moldoc_molecules=[];</script>")
+        self.moldoc_scripts_added = True
+
     attributes = _format_attributes(node.container)
     molecule_sdf = Chem.MolToMolBlock(node.molecule, forceV3000=True)
     self.body.append(
         f'<div id="{node.moldoc_name}" {attributes}></div>'
-        "<script>"
-        f"{{let element = document.querySelector('#{node.moldoc_name}');"
+        "<script>{"
+        "const drawMol = () => {"
+        f"let element = document.querySelector('#{node.moldoc_name}');"
         f"let data = `{molecule_sdf}`;"
-        f"{node.script}}}</script>"
+        f"{node.script}"
+        "};"
+        "if (typeof $3Dmol === 'undefined') { "
+        "moldoc_molecules.push(drawMol); } else { drawMol() }"
+        "}</script>"
     )
     raise nodes.SkipNode
 
@@ -112,6 +119,7 @@ def add_moldoc_scripts(
         and pagename in app.env.moldoc_documents
     ):
         app.add_js_file("3Dmol.min.js")
+        app.add_js_file(None, body="moldoc_molecules.forEach(f=>f());")
 
 
 def purge_moldoc_documents(
