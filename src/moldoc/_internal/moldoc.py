@@ -106,6 +106,7 @@ def copy_asset_files(app: Sphinx, exc: Exception | None) -> None:
     asset_files = (
         "molDraw.js",
         "three.min.js",
+        "3Dmol.min.js",
     )
     static_dir = app.builder.outdir / "_static"
     # Build is HTML and succeeded.
@@ -132,6 +133,7 @@ def add_moldoc_scripts(
     ):
         app.add_js_file("three.min.js")
         app.add_js_file("molDraw.js")
+        app.add_js_file("3Dmol.min.js")
         app.add_js_file(None, body="moldoc_molecules.forEach(f=>f());")
 
 
