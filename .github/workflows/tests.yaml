@@ -11,43 +11,55 @@ jobs:
   ruff:
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v4
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v3
         with:
-          python-version: "3.11"
-          cache: "pip"
-      - run: "pip install -e '.[dev]'"
-      - run: ruff check src/ tests/
+          enable-cache: true
+          cache-dependency-glob: "uv.lock"
+      - uses: actions/setup-python@v5
+        with:
+          python-version-file: "pyproject.toml"
+      - run: uv sync --all-extras --dev
+      - run: uv run ruff check src/ tests/
 
   mypy:
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v4
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v3
         with:
-          python-version: "3.11"
-          cache: "pip"
-      - run: "pip install -e '.[dev]'"
-      - run: mypy src/ tests/
+          enable-cache: true
+          cache-dependency-glob: "uv.lock"
+      - uses: actions/setup-python@v5
+        with:
+          python-version-file: "pyproject.toml"
+      - run: uv sync --all-extras --dev
+      - run: uv run mypy src/ tests/
 
   ruff-format:
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v4
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v3
         with:
-          python-version: "3.11"
-          cache: "pip"
-      - run: "pip install -e '.[dev]'"
-      - run: ruff format --check src/ tests/
+          enable-cache: true
+          cache-dependency-glob: "uv.lock"
+      - uses: actions/setup-python@v5
+        with:
+          python-version-file: "pyproject.toml"
+      - run: uv sync --all-extras --dev
+      - run: uv run ruff format --check src/ tests/
 
   examples:
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v4
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v3
         with:
-          python-version: "3.11"
-          cache: "pip"
-      - run: "pip install -e '.[dev]'"
-      - run: make -C tests html
+          enable-cache: true
+          cache-dependency-glob: "uv.lock"
+      - uses: actions/setup-python@v5
+        with:
+          python-version-file: "pyproject.toml"
+      - run: uv sync --all-extras --dev
+      - run: uv run make -C tests html

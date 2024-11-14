@@ -1,5 +1,4 @@
 from collections.abc import Iterable
-from typing import TypeAlias
 
 
 class Color:
@@ -162,7 +161,7 @@ class MeshStandardMaterial:
         return self._flat_shading
 
 
-Material: TypeAlias = (
+type Material = (
     MeshLambertMaterial
     | MeshNormalMaterial
     | MeshPhongMaterial
