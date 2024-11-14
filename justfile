@@ -31,6 +31,11 @@ check:
 
   test $error = 0
 
+# Build test docs
+test-docs:
+  uv run make -C tests html
+  echo Your docs are in: $PWD/tests/build/html/index.html
+
 # Auto-fix code issues.
 fix:
   black .
