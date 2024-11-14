@@ -49,7 +49,7 @@ class MolDoc(SphinxDirective):
             container=globals_.get(
                 "moldoc_container_attributes",
                 {
-                    "style": "width: 60%; height: 400px; position: relative;",
+                    "style": "width: 100%; height: 400px; position: relative;",
                 },
             ),
             script=globals_.get("moldoc_script", DEFAULT_SCRIPT),
