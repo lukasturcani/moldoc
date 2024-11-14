@@ -61,7 +61,9 @@ def html_moldoc(self: HTML5Translator, node: MolDocNode) -> None:
     attributes = _format_attributes(node.container)
     self.body.append(
         f'<div id="{node.moldoc_name}" {attributes}></div>'
-        f"<script>{node.script}</script>"
+        "<script>"
+        "let element = document.querySelector('#{node.moldoc_name}');"
+        f"{node.script}</script>"
     )
     raise nodes.SkipNode
 
