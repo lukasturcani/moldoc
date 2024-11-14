@@ -20,7 +20,7 @@ jobs:
         with:
           python-version-file: "pyproject.toml"
       - run: uv sync --all-extras --dev
-      - run: ruff check src/ tests/
+      - run: uv run ruff check src/ tests/
 
   mypy:
     runs-on: ubuntu-22.04
@@ -34,7 +34,7 @@ jobs:
         with:
           python-version-file: "pyproject.toml"
       - run: uv sync --all-extras --dev
-      - run: mypy src/ tests/
+      - run: uv run mypy src/ tests/
 
   ruff-format:
     runs-on: ubuntu-22.04
@@ -48,7 +48,7 @@ jobs:
         with:
           python-version-file: "pyproject.toml"
       - run: uv sync --all-extras --dev
-      - run: ruff format --check src/ tests/
+      - run: uv run ruff format --check src/ tests/
 
   examples:
     runs-on: ubuntu-22.04
@@ -62,4 +62,4 @@ jobs:
         with:
           python-version-file: "pyproject.toml"
       - run: uv sync --all-extras --dev
-      - run: make -C tests html
+      - run: uv run make -C tests html
