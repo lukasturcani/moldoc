@@ -119,7 +119,13 @@ def add_moldoc_scripts(
         and pagename in app.env.moldoc_documents
     ):
         app.add_js_file("3Dmol.min.js")
-        app.add_js_file(None, body="moldoc_molecules.forEach(f=>f());")
+        app.add_js_file(
+            None,
+            body=(
+                "if (typeof moldoc_molecules !== 'undefined')"
+                "{moldoc_molecules.forEach(f=>f());}"
+            ),
+        )
 
 
 def purge_moldoc_documents(
