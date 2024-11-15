@@ -176,6 +176,53 @@ define your molecules programatically:
 Configuration
 -------------
 
+Using a script
+..............
+
+``moldoc`` lets you edit the `3Dmol.js <https://github.com/3dmol/3Dmol.js>`_
+script that you want to use with the ``moldoc_script`` variable. This will
+override the default ``moldoc`` script which means you can customize every
+aspect of the rendering by using `3Dmol.js <https://github.com/3dmol/3Dmol.js>`_
+directly. For example, this is how you enable auto-rotation:
+
+.. code-block:: rst
+
+    .. moldoc::
+
+        import rdkit.Chem as rdkit
+        moldoc_display_molecule = rdkit.AddHs(rdkit.MolFromSmiles("Brc1ccc(Br)cc1"))
+        moldoc_script = """
+            let config = {
+                backgroundAlpha: 0.0,
+                backgroundColor: 'transparent',
+            };
+            let viewer = $3Dmol.createViewer(element, config);
+            let model = viewer.addModel(data, 'sdf');
+            model.setStyle({}, {sphere: {scale: 0.33}});
+            model.setStyle({}, {stick: {}}, true);
+            viewer.zoomTo();
+            viewer.render();
+            viewer.spin();
+        """
+
+.. moldoc::
+
+    import rdkit.Chem as rdkit
+    moldoc_display_molecule = rdkit.AddHs(rdkit.MolFromSmiles("Brc1ccc(Br)cc1"))
+    moldoc_script = """
+        let config = {
+            backgroundAlpha: 0.0,
+            backgroundColor: 'transparent',
+        };
+        let viewer = $3Dmol.createViewer(element, config);
+        let model = viewer.addModel(data, 'sdf');
+        model.setStyle({}, {sphere: {scale: 0.33}});
+        model.setStyle({}, {stick: {}}, true);
+        viewer.zoomTo();
+        viewer.render();
+        viewer.spin();
+    """
+
 Indices and tables
 ==================
 
