@@ -153,32 +153,23 @@ define your molecules programatically:
 
 .. moldoc::
 
-    def some_fn():
-        """
-        Do something.
+    import stk
 
-        .. moldoc::
-
-            import stk
-
-            bb1 = stk.BuildingBlock(
-                smiles='NCCN',
-                functional_groups=[stk.PrimaryAminoFactory()],
-            )
-            bb2 = stk.BuildingBlock(
-                smiles='O=CC(C=O)C=O',
-                functional_groups=[stk.AldehydeFactory()],
-            )
-            cage = stk.ConstructedMolecule(
-                topology_graph=stk.cage.FourPlusSix(
-                    building_blocks=(bb1, bb2),
-                    optimizer=stk.MCHammer(),
-                ),
-            )
-            moldoc_display_molecule = cage.to_rdkit_mol()
-
-        """
-        print('In some_fn()')
+    bb1 = stk.BuildingBlock(
+        smiles='NCCN',
+        functional_groups=[stk.PrimaryAminoFactory()],
+    )
+    bb2 = stk.BuildingBlock(
+        smiles='O=CC(C=O)C=O',
+        functional_groups=[stk.AldehydeFactory()],
+    )
+    cage = stk.ConstructedMolecule(
+        topology_graph=stk.cage.FourPlusSix(
+            building_blocks=(bb1, bb2),
+            optimizer=stk.MCHammer(),
+        ),
+    )
+    moldoc_display_molecule = cage.to_rdkit_mol()
 
 
 Configuration
