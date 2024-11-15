@@ -25,6 +25,7 @@ dev = [
   "types-docutils",
   "furo",
   "sphinx-copybutton",
+  "stk",
 ]
 
 [project.urls]

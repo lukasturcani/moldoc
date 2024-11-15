@@ -113,6 +113,12 @@ Note that the content in the ``moldoc`` directive is a just a Python script,
 which has to define a ``moldoc_display_molecule`` variable holding an
 ``rdkit.Mol`` object.
 
+.. tip::
+
+    You do not have to define an ``rdkit`` object if you don't want, you can
+    also define a :class:`moldoc.molecule.Molecule`, which simply takes a list
+    of atoms, bonds and positions. See an example `here <avoiding-rdkit>`_
+
 Because the content of a ``moldoc`` directive is just a Python script you can
 define your molecules programatically:
 
@@ -144,6 +150,36 @@ define your molecules programatically:
 
         """
         print('In some_fn()')
+
+.. moldoc::
+
+    def some_fn():
+        """
+        Do something.
+
+        .. moldoc::
+
+            import stk
+
+            bb1 = stk.BuildingBlock(
+                smiles='NCCN',
+                functional_groups=[stk.PrimaryAminoFactory()],
+            )
+            bb2 = stk.BuildingBlock(
+                smiles='O=CC(C=O)C=O',
+                functional_groups=[stk.AldehydeFactory()],
+            )
+            cage = stk.ConstructedMolecule(
+                topology_graph=stk.cage.FourPlusSix(
+                    building_blocks=(bb1, bb2),
+                    optimizer=stk.MCHammer(),
+                ),
+            )
+            moldoc_display_molecule = cage.to_rdkit_mol()
+
+        """
+        print('In some_fn()')
+
 
 Configuration
 -------------

@@ -45,7 +45,7 @@ place it into your `rst` files:
 
 > [!TIP]
 > Below is just a picture, see the actual, interactive result
-  [here](https://moldoc.readthedocs.io/en/stable#adding-molecules-into-your-docs>).
+  [here](https://moldoc.readthedocs.io/en/stable/index.html#adding-molecules-into-your-docs>).
 
 ![adding-molecules-into-your-docs](./docs/source/_static/adding-molecules-into-your-docs.png)
 
@@ -70,13 +70,20 @@ def some_fn():
 
 > [!TIP]
 > Below is just a picture, see the actual, interactive result
-  [here](https://moldoc.readthedocs.io/en/stable#adding-molecules-into-your-docs-2).
+  [here](https://moldoc.readthedocs.io/en/stable/index.html#adding-molecules-into-your-docs-2).
 
 ![adding-molecules-into-your-docs](./docs/source/_static/adding-molecules-into-your-docs-2.png)
 
 Note that the content in the `moldoc` directive is a just a Python script,
 which has to define a `moldoc_display_molecule` variable holding an `rdkit.Mol`
 object.
+
+> [!TIP]
+> You do not have to use an `rdkit` object if you don't want, you can
+  also define a
+  [moldoc.molecule.Molecule](https://moldoc.readthedocs.io/en/stable/_autosummary/moldoc.molecule.Molecule.html),
+  which simply takes a list of atoms, bonds and positions. See an example
+  [here](https://moldoc.readthedocs.io/en/stable/index.html#avoiding-rdkit).
 
 Because the content of a `moldoc` directive is just a Python script you can
 define your molecules programatically:
