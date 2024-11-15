@@ -171,10 +171,8 @@ define your molecules programatically:
     )
     moldoc_display_molecule = cage.to_rdkit_mol()
 
-
 Configuration
 -------------
-
 
 Indices and tables
 ==================

@@ -118,6 +118,13 @@ def some_fn():
 
 ```
 
+> [!TIP]
+> Below is just a picture, see the actual, interactive result
+  [here](https://moldoc.readthedocs.io/en/stable/index.html#adding-molecules-into-your-docs-3).
+
+
+![adding-molecules-into-your-docs](./docs/source/_static/adding-molecules-into-your-docs-3.png)
+
 # Configuration
 
 See our [docs](https://moldoc.readthedocs.io/en/stable)!
