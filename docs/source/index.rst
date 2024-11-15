@@ -15,7 +15,7 @@ Welcome to moldoc's documentation!
 
 .. tip::
 
-  If you like ``moldoc`` remember to give it a star!
+    If you like ``moldoc`` remember to give it a star!
 
 Introduction
 ------------
