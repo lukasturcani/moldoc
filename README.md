@@ -70,7 +70,9 @@ def some_fn():
 
 > [!TIP]
 > Below is just a picture, see the actual, interactive result
-  [here](https://moldoc.readthedocs.io/en/stable#adding-molecules-into-your-docs-2>).
+  [here](https://moldoc.readthedocs.io/en/stable#adding-molecules-into-your-docs-2).
+
+![adding-molecules-into-your-docs](./docs/source/_static/adding-molecules-into-your-docs-2.png)
 
 Note that the content in the `moldoc` directive is a just a Python script,
 which has to define a `moldoc_display_molecule` variable holding an `rdkit.Mol`
