@@ -15,13 +15,13 @@ with `3Dmol.js` you can draw in your Python docs!
 
 # Installation
 
-First, run
+First, run:
 
 ```bash
 pip install moldoc
 ```
 
-and then add it to your extensions in `conf.py`
+and then add it to your extensions in `conf.py`:
 
 ```python
 extensions = [
@@ -32,7 +32,7 @@ extensions = [
 # Adding Molecules into Your Docs
 
 You can define molecules you show with the `moldoc` directive, which you  can
-place it into your `rst` files
+place it into your `rst` files:
 
 ```rst
 .. moldoc::
@@ -44,7 +44,7 @@ place it into your `rst` files
 Below is just a picture, see the actual, interactive result
 [here](https://moldoc.readthedocs.io/en/stable#adding-molecules-into-your-docs>).
 
-or in your Python docstrings
+or in your Python docstrings:
 
 ```python
 def some_fn():
