@@ -76,8 +76,10 @@ place it into your ``rst`` files:
         import rdkit.Chem as rdkit
         moldoc_display_molecule = rdkit.MolFromSmiles("Brc1ccc(Br)cc1")
 
-Below is just a picture, see the actual, interactive result
-`here <https://moldoc.readthedocs.io/en/stable#adding-molecules-into-your-docs>`_.
+.. moldoc::
+
+    import rdkit.Chem as rdkit
+    moldoc_display_molecule = rdkit.MolFromSmiles("Brc1ccc(Br)cc1")
 
 or in your Python docstrings:
 
