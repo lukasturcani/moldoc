@@ -1,5 +1,9 @@
 :author: Lukas Turcani
 
+.. note::
+
+    If you like ``moldoc`` remember to give it a star!
+
 Introduction
 ============
 
