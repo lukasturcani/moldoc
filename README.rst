@@ -1,6 +1,6 @@
 :author: Lukas Turcani
 
-.. note::
+.. admonition::
 
     If you like ``moldoc`` remember to give it a star!
 
