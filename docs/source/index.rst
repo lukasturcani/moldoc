@@ -119,6 +119,8 @@ which has to define a ``moldoc_display_molecule`` variable holding an
     also define a :class:`moldoc.molecule.Molecule`, which simply takes a list
     of atoms, bonds and positions. See an example `here <avoiding-rdkit>`_
 
+.. _adding-molecules-into-your-docs-3:
+
 Because the content of a ``moldoc`` directive is just a Python script you can
 define your molecules programatically:
 
