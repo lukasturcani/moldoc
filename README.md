@@ -58,13 +58,19 @@ def some_fn():
 
     .. moldoc::
 
-        import rdkit.Chem as rdkit
-        moldoc_display_molecule = rdkit.MolFromSmiles("Brc1ccc(Br)cc1")
+        import rdkit.Chem.AllChem as rdkit
+        mol = rdkit.AddHs(rdkit.MolFromSmiles("BrC1CCC(N)CC1"))
+        rdkit.EmbedMolecule(mol, rdkit.ETKDGv3())
+        moldoc_display_molecule = mol
 
     """
 
     print('In some_fn()')
 ```
+
+> [!TIP]
+> Below is just a picture, see the actual, interactive result
+  [here](https://moldoc.readthedocs.io/en/stable#adding-molecules-into-your-docs-2>).
 
 Note that the content in the `moldoc` directive is a just a Python script,
 which has to define a `moldoc_display_molecule` variable holding an `rdkit.Mol`
