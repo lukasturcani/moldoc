@@ -37,6 +37,12 @@ test-docs:
   uv run make -C tests html
   echo Your docs are in: $PWD/tests/build/html/index.html
 
+# Build docs
+docs:
+  rm -r ./docs/build ./docs/source/_autosummary
+  uv run make -C docs html
+  echo Your docs are in: $PWD/docs/build/html/index.html
+
 # Auto-fix code issues.
 fix:
   black .
