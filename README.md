@@ -66,7 +66,7 @@ which has to define a `moldoc_display_molecule` variable holding a `rdkit.Mol`
 object.
 
 Because the content of a `moldoc` directive is just a Python script you can
-define your molecules programatically
+define your molecules programatically:
 
 ```python
 def some_fn():
