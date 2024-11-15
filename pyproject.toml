@@ -24,6 +24,7 @@ dev = [
   "twine",
   "types-docutils",
   "furo",
+  "sphinx-copybutton",
 ]
 
 [project.urls]

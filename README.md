@@ -1,6 +1,8 @@
 > [!TIP]
 > If you like ``moldoc`` remember to give it a star!
 
+Docs: https://moldoc.readthedocs.io
+
 # Introduction
 
 `moldoc` is a Sphinx extension for making better chemistry documentation. It
@@ -8,7 +10,7 @@ allows you to embed 3D, interactive models of molecules directly into your
 compiled docs. You can see it being used in the
 [stk](https://stk.readthedocs.io/en/stable/basic_examples.html) docs:
 
-![moldoc](moldoc.gif)
+![moldoc](./docs/source/_static/moldoc.gif)
 
 It is based on https://github.com/3dmol/3Dmol.js, so anything you can draw
 with `3Dmol.js` you can draw in your Python docs!

@@ -22,10 +22,26 @@ Introduction
 
 ``moldoc`` is a Sphinx extension for making better chemistry documentation. It
 allows you to embed 3D, interactive models of molecules directly into your
-compiled docs. You can see it being used in the
-`stk <https://stk.readthedocs.io/en/stable/basic_examples.html>`_ docs:
+compiled docs. Like this!
 
-.. image:: moldoc.gif
+.. moldoc::
+
+    import rdkit.Chem as rdkit
+    moldoc_display_molecule = rdkit.AddHs(rdkit.MolFromSmiles("Brc1ccc(Br)cc1"))
+    moldoc_script = """
+        let config = {
+            backgroundAlpha: 0.0,
+            backgroundColor: 'transparent',
+        };
+        let viewer = $3Dmol.createViewer(element, config);
+        let model = viewer.addModel(data, 'sdf');
+        model.setStyle({}, {sphere: {scale: 0.33}});
+        model.setStyle({}, {stick: {}}, true);
+        viewer.zoomTo();
+        viewer.render();
+        viewer.spin();
+    """
+
 
 It is based on https://github.com/3dmol/3Dmol.js, so anything you can draw
 with ``3Dmol.js`` you can draw in your Python docs!
