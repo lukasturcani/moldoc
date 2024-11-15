@@ -44,9 +44,6 @@ which you  can place it into your ``rst`` files
 
     .. moldoc::
 
-        # The content of a moldoc directive is just a Python script
-        # which needs to define a moldoc_display_molecule variable.
-
         import rdkit.Chem as rdkit
         moldoc_display_molecule = rdkit.MolFromSmiles("Brc1ccc(Br)cc1")
 
@@ -59,9 +56,6 @@ or in your Python docstrings
         Do something.
 
         .. moldoc::
-
-            # The content of a moldoc directive is just a Python script
-            # which needs to define a moldoc_display_molecule variable.
 
             import rdkit.Chem as rdkit
             moldoc_display_molecule = rdkit.MolFromSmiles("Brc1ccc(Br)cc1")
