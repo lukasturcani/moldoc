@@ -91,15 +91,24 @@ or in your Python docstrings:
 
         .. moldoc::
 
-            import rdkit.Chem as rdkit
-            moldoc_display_molecule = rdkit.MolFromSmiles("Brc1ccc(Br)cc1")
+            import rdkit.Chem.AllChem as rdkit
+            mol = rdkit.AddHs(rdkit.MolFromSmiles("BrC1CCC(N)CC1"))
+            rdkit.EmbedMolecule(mol, rdkit.ETKDGv3())
+            moldoc_display_molecule = mol
 
         """
 
         print('In some_fn()')
 
+.. moldoc::
+
+    import rdkit.Chem.AllChem as rdkit
+    mol = rdkit.AddHs(rdkit.MolFromSmiles("BrC1CCC(N)CC1"))
+    rdkit.EmbedMolecule(mol, rdkit.ETKDGv3())
+    moldoc_display_molecule = mol
+
 Note that the content in the ``moldoc`` directive is a just a Python script,
-which has to define a ``moldoc_display_molecule`` variable holding a
+which has to define a ``moldoc_display_molecule`` variable holding an
 ``rdkit.Mol`` object.
 
 Because the content of a ``moldoc`` directive is just a Python script you can

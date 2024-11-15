@@ -43,10 +43,10 @@ place it into your `rst` files:
     moldoc_display_molecule = rdkit.MolFromSmiles("Brc1ccc(Br)cc1")
 ```
 
-![adding-molecules-into-your-docs](./docs/source/_static/adding-molecules-into-your-docs.png)
-
 Below is just a picture, see the actual, interactive result
 [here](https://moldoc.readthedocs.io/en/stable#adding-molecules-into-your-docs>).
+
+![adding-molecules-into-your-docs](./docs/source/_static/adding-molecules-into-your-docs.png)
 
 or in your Python docstrings:
 
@@ -66,7 +66,7 @@ def some_fn():
 ```
 
 Note that the content in the `moldoc` directive is a just a Python script,
-which has to define a `moldoc_display_molecule` variable holding a `rdkit.Mol`
+which has to define a `moldoc_display_molecule` variable holding an `rdkit.Mol`
 object.
 
 Because the content of a `moldoc` directive is just a Python script you can
