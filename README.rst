@@ -13,6 +13,9 @@ in the stk__ docs.
 .. __: https://stk.readthedocs.io/en/stable/basic_examples.html
 
 
+It is based on https://github.com/3dmol/3Dmol.js, so anything you can draw
+with ``3Dmol.js`` you can draw in your Python docs!
+
 Installation
 ============
 
@@ -31,8 +34,6 @@ and then add it to your extensions in ``conf.py``
         'moldoc',
     ]
 
-
-
 Adding Molecules into Your Docs
 ===============================
 
@@ -41,31 +42,13 @@ which you  can place it into your ``rst`` files
 
 .. code-block:: rst
 
-
     .. moldoc::
 
         # The content of a moldoc directive is just a Python script
         # which needs to define a moldoc_display_molecule variable.
 
-        import moldoc.molecule as molecule
-
-        moldoc_display_molecule = molecule.Molecule(
-            atoms=(
-                # molecule.Atom(atomic_number, position)
-                molecule.Atom(6, (-0.06, -0.17, 0.)),
-                molecule.Atom(17, (-1.35, 1.04, -0.04)),
-                molecule.Atom(35, (1.65, 0.73, -0.06)),
-                molecule.Atom(1, (-0.15, -0.88, -0.87)),
-                molecule.Atom(1, (-0.09, -0.72, 0.97)),
-            ),
-            bonds=(
-                # molecule.Bond(atom1_id, atom2_id, order)
-                molecule.Bond(0, 1, 1),
-                molecule.Bond(0, 2, 1),
-                molecule.Bond(0, 3, 1),
-                molecule.Bond(0, 4, 1),
-            ),
-        )
+        import rdkit.Chem as rdkit
+        moldoc_display_molecule = rdkit.MolFromSmiles("Brc1ccc(Br)cc1")
 
 or in your Python docstrings
 
@@ -80,25 +63,8 @@ or in your Python docstrings
             # The content of a moldoc directive is just a Python script
             # which needs to define a moldoc_display_molecule variable.
 
-            import moldoc.molecule as molecule
-
-            moldoc_display_molecule = molecule.Molecule(
-                atoms=(
-                    # molecule.Atom(atomic_number, position)
-                    molecule.Atom(6, (-0.06, -0.17, 0.)),
-                    molecule.Atom(17, (-1.35, 1.04, -0.04)),
-                    molecule.Atom(35, (1.65, 0.73, -0.06)),
-                    molecule.Atom(1, (-0.15, -0.88, -0.87)),
-                    molecule.Atom(1, (-0.09, -0.72, 0.97)),
-                ),
-                bonds=(
-                    # molecule.Bond(atom1_id, atom2_id, order)
-                    molecule.Bond(0, 1, 1),
-                    molecule.Bond(0, 2, 1),
-                    molecule.Bond(0, 3, 1),
-                    molecule.Bond(0, 4, 1),
-                ),
-            )
+            import rdkit.Chem as rdkit
+            moldoc_display_molecule = rdkit.MolFromSmiles("Brc1ccc(Br)cc1")
 
         """
 
@@ -106,7 +72,7 @@ or in your Python docstrings
 
 Note that the content in the ``moldoc`` directive is a just a Python
 script, which has to define a ``moldoc_display_molecule`` variable
-holding a ``moldoc.molecule.Molecule`` instance.
+holding a ``rdkit.Mol`` instance.
 
 Because the content of a ``moldoc`` directive is just a Python script
 you can define your molecules programatically
