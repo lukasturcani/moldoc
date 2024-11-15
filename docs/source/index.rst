@@ -44,7 +44,7 @@ and then add it to your extensions in ``conf.py``:
 .. code-block:: python
 
     extensions = [
-        'moldoc',
+        "moldoc",
     ]
 
 Adding Molecules into Your Docs

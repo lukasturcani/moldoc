@@ -25,7 +25,7 @@ and then add it to your extensions in `conf.py`:
 
 ```python
 extensions = [
-    'moldoc',
+    "moldoc",
 ]
 ```
 
