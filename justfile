@@ -33,13 +33,13 @@ check:
 
 # Build test docs
 test-docs:
-  rm -r ./tests/build
+  rm -rf ./tests/build
   uv run make -C tests html
   echo Your docs are in: $PWD/tests/build/html/index.html
 
 # Build docs
 docs:
-  rm -r ./docs/build ./docs/source/_autosummary
+  rm -rf ./docs/build ./docs/source/_autosummary
   uv run make -C docs html
   echo Your docs are in: $PWD/docs/build/html/index.html
 
