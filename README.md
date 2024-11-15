@@ -43,8 +43,9 @@ place it into your `rst` files:
     moldoc_display_molecule = rdkit.MolFromSmiles("Brc1ccc(Br)cc1")
 ```
 
-Below is just a picture, see the actual, interactive result
-[here](https://moldoc.readthedocs.io/en/stable#adding-molecules-into-your-docs>).
+> [!TIP]
+> Below is just a picture, see the actual, interactive result
+  [here](https://moldoc.readthedocs.io/en/stable#adding-molecules-into-your-docs>).
 
 ![adding-molecules-into-your-docs](./docs/source/_static/adding-molecules-into-your-docs.png)
 
