@@ -223,6 +223,16 @@ directly. For example, this is how you enable auto-rotation:
         viewer.spin();
     """
 
+Avoiding rdkit
+..............
+
+Sometimes you may want to avoid using ``rdkit`` because it has valence
+restrictions or it just does not fit your workflow. In those cases you can use
+:class:`moldoc.molecule.Molecule`, which simply holds a list atoms, bonds and
+their positions:
+
+
+
 Indices and tables
 ==================
 
