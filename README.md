@@ -85,7 +85,6 @@ def some_fn():
             smiles='O=CC(C=O)C=O',
             functional_groups=[stk.AldehydeFactory()],
         )
-
         cage = stk.ConstructedMolecule(
             topology_graph=stk.cage.FourPlusSix(
                 building_blocks=(bb1, bb2),
