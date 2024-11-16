@@ -234,6 +234,48 @@ restrictions or it just does not fit your workflow. In those cases you can use
 :class:`moldoc.molecule.Molecule`, which simply holds a list atoms, bonds and
 their positions:
 
+.. code-block:: rst
+
+   .. moldoc::
+
+        from moldoc import molecule
+        moldoc_display_molecule = molecule.Molecule(
+            atoms=(
+                # molecule.Atom(atomic_number, position)
+                molecule.Atom(6, (-0.06, -0.17, 0.)),
+                molecule.Atom(17, (-1.35, 1.04, -0.04)),
+                molecule.Atom(35, (1.65, 0.73, -0.06)),
+                molecule.Atom(1, (-0.15, -0.88, -0.87)),
+                molecule.Atom(1, (-0.09, -0.72, 0.97)),
+            ),
+            bonds=(
+                # molecule.Bond(atom1_id, atom2_id, order)
+                molecule.Bond(0, 1, Simple(1)),
+                molecule.Bond(0, 2, Simple(1)),
+                molecule.Bond(0, 3, Simple(1)),
+                molecule.Bond(0, 4, Dative(1)),
+            ),
+        )
+
+.. moldoc::
+
+    from moldoc import molecule
+    moldoc_display_molecule = molecule.Molecule(
+        atoms=(
+            molecule.Atom(6, (-0.06, -0.17, 0.)),
+            molecule.Atom(17, (-1.35, 1.04, -0.04)),
+            molecule.Atom(35, (1.65, 0.73, -0.06)),
+            molecule.Atom(1, (-0.15, -0.88, -0.87)),
+            molecule.Atom(1, (-0.09, -0.72, 0.97)),
+        ),
+        bonds=(
+            molecule.Bond(0, 1, molecule.Simple(1)),
+            molecule.Bond(0, 2, molecule.Simple(1)),
+            molecule.Bond(0, 3, molecule.Simple(1)),
+            molecule.Bond(0, 4, molecule.Dative()),
+        ),
+    )
+
 Indices and tables
 ==================
 
