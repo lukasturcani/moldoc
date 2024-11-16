@@ -118,7 +118,7 @@ which has to define a ``moldoc_display_molecule`` variable holding an
 
     You do not have to define an ``rdkit`` object if you don't want, you can
     also define a :class:`moldoc.molecule.Molecule`, which simply takes a list
-    of atoms, bonds and positions. See an example `here <avoiding-rdkit>`_.
+    of atoms, bonds and positions. See an example :ref:`here <avoiding-rdkit>`.
 
 .. _adding-molecules-into-your-docs-3:
 
@@ -224,6 +224,8 @@ directly. For example, this is how you enable auto-rotation:
         viewer.spin();
     """
 
+.. _avoiding-rdkit:
+
 Avoiding rdkit
 ..............
 
@@ -231,8 +233,6 @@ Sometimes you may want to avoid using ``rdkit`` because it has valence
 restrictions or it just does not fit your workflow. In those cases you can use
 :class:`moldoc.molecule.Molecule`, which simply holds a list atoms, bonds and
 their positions:
-
-
 
 Indices and tables
 ==================
