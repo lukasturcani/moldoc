@@ -154,6 +154,11 @@ def merge_moldoc_documents(
 
 
 def setup(app: Sphinx) -> dict:
+    """Setup the extension.
+
+    Used by internally by Sphinx.
+
+    """
     app.connect("build-finished", copy_asset_files)
     app.connect("html-page-context", add_moldoc_scripts)
     app.connect("env-purge-doc", purge_moldoc_documents)
