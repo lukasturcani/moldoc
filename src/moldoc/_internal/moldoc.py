@@ -8,6 +8,7 @@ from sphinx.environment import BuildEnvironment
 from sphinx.util.docutils import SphinxDirective
 from sphinx.writers.html5 import HTML5Translator
 
+from moldoc._internal.molecule import Molecule
 from moldoc.version import __version__
 
 
@@ -15,7 +16,7 @@ class MolDocNode(nodes.Body, nodes.Element):
     def __init__(
         self,
         moldoc_name: str,
-        molecule: Chem.Mol,
+        molecule: Chem.Mol | Molecule,
         container: dict[str, str],
         script: str,
     ) -> None:
@@ -82,19 +83,36 @@ def html_moldoc(self: HTML5Translator, node: MolDocNode) -> None:
         self.moldoc_scripts_added = True
 
     attributes = _format_attributes(node.container)
-    molecule_sdf = Chem.MolToMolBlock(node.molecule, forceV3000=True)
-    self.body.append(
-        f'<div id="{node.moldoc_name}" {attributes}></div>'
-        "<script>{"
-        "const drawMol = () => {"
-        f"let element = document.querySelector('#{node.moldoc_name}');"
-        f"let data = `{molecule_sdf}`;"
-        f"{node.script}"
-        "};"
-        "if (typeof $3Dmol === 'undefined') { "
-        "moldoc_molecules.push(drawMol); } else { drawMol() }"
-        "}</script>"
-    )
+    match node.molecule:
+        case Chem.Mol():
+            molecule_sdf = Chem.MolToMolBlock(node.molecule, forceV3000=True)
+            self.body.append(
+                f'<div id="{node.moldoc_name}" {attributes}></div>'
+                "<script>{"
+                "const drawMol = () => {"
+                f"let element = document.querySelector('#{node.moldoc_name}');"
+                f"let data = `{molecule_sdf}`;"
+                f"{node.script}"
+                "};"
+                "if (typeof $3Dmol === 'undefined') { "
+                "moldoc_molecules.push(drawMol); } else { drawMol() }"
+                "}</script>"
+            )
+        case Molecule():
+            self.body.append(
+                f'<div id="{node.moldoc_name}" {attributes}></div>'
+                "<script>{"
+                "const drawMol = () => {"
+                f"let element = document.querySelector('#{node.moldoc_name}');"
+                f"let data = `{molecule_sdf}`;"
+                f"{node.script}"
+                "};"
+                "if (typeof $3Dmol === 'undefined') { "
+                "moldoc_molecules.push(drawMol); } else { drawMol() }"
+                "}</script>"
+            )
+        case unreachable:
+            typing.assert_never(unreachable)
     raise nodes.SkipNode
 
 
