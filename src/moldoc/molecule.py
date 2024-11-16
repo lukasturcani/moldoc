@@ -1,31 +1,5 @@
-"""Molecular rendering."""
+"""Molecule data."""
 
-from moldoc._internal.molecule import (
-    Atom,
-    AtomConfig,
-    Bond,
-    Color,
-    Material,
-    MeshLambertMaterial,
-    MeshNormalMaterial,
-    MeshPhongMaterial,
-    MeshPhysicalMaterial,
-    MeshStandardMaterial,
-    Molecule,
-    MoleculeConfig,
-)
+from moldoc._internal.molecule import Atom, Bond, Dative, Molecule, Simple
 
-__all__ = [
-    "Atom",
-    "AtomConfig",
-    "Bond",
-    "Color",
-    "Material",
-    "MeshLambertMaterial",
-    "MeshNormalMaterial",
-    "MeshPhongMaterial",
-    "MeshPhysicalMaterial",
-    "MeshStandardMaterial",
-    "Molecule",
-    "MoleculeConfig",
-]
+__all__ = ["Molecule", "Atom", "Bond", "Simple", "Dative"]

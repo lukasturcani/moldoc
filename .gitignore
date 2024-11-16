@@ -5,3 +5,5 @@ dist
 **/.cache
 src/moldoc/version.py
 tests/build
+docs/build
+docs/source/_autosummary
