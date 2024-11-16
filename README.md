@@ -1,5 +1,5 @@
 > [!TIP]
-> If you like ``moldoc`` remember to give it a star!
+> ⭐ If you like ``moldoc`` remember to give it a star! ⭐
 
 Docs: https://moldoc.readthedocs.io
 
