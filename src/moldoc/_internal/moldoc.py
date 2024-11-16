@@ -27,7 +27,7 @@ class MolDocNode(nodes.Body, nodes.Element):
         self.script = script
 
 
-DEFAULT_SCRIPT = """
+DEFAULT_SCRIPT_RDKIT = """
 let config = {
     backgroundAlpha: 0.0,
     backgroundColor: 'transparent',
@@ -40,6 +40,13 @@ viewer.zoomTo();
 viewer.render();
 """
 
+DEFAULT_SCRIPT_MOLECULE = """
+let config = {
+    backgroundAlpha: 0.0,
+    backgroundColor: 'transparent',
+};
+"""
+
 
 class MolDoc(SphinxDirective):
     has_content = True
@@ -48,16 +55,27 @@ class MolDoc(SphinxDirective):
         content = "\n".join(self.content)
         globals_: dict[str, typing.Any] = {}
         exec(content, globals_)  # noqa: S102
+
+        molecule = globals_["moldoc_display_molecule"]
+        default_script = DEFAULT_SCRIPT_RDKIT
+        match molecule:
+            case Chem.Mol():
+                pass
+            case Molecule():
+                default_script = DEFAULT_SCRIPT_MOLECULE
+            case unreachable:
+                typing.assert_never(unreachable)
+
         node = MolDocNode(
             moldoc_name=f'moldoc_{self.env.new_serialno("moldoc")}',
-            molecule=globals_["moldoc_display_molecule"],
+            molecule=molecule,
             container=globals_.get(
                 "moldoc_container_attributes",
                 {
                     "style": "width: 100%; height: 400px; position: relative;",
                 },
             ),
-            script=globals_.get("moldoc_script", DEFAULT_SCRIPT),
+            script=globals_.get("moldoc_script", default_script),
         )
 
         if not hasattr(self.env, "moldoc_documents"):
