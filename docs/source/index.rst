@@ -11,6 +11,7 @@ Welcome to moldoc's documentation!
   :maxdepth: 2
   :caption: Contents:
 
+  Molecule <_autosummary/moldoc.molecule.Molecule>
   Modules <modules>
 
 .. tip::
@@ -117,7 +118,7 @@ which has to define a ``moldoc_display_molecule`` variable holding an
 
     You do not have to define an ``rdkit`` object if you don't want, you can
     also define a :class:`moldoc.molecule.Molecule`, which simply takes a list
-    of atoms, bonds and positions. See an example `here <avoiding-rdkit>`_
+    of atoms, bonds and positions. See an example `here <avoiding-rdkit>`_.
 
 .. _adding-molecules-into-your-docs-3:
 
