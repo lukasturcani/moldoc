@@ -9,10 +9,11 @@ maintainers = [
 ]
 dependencies = [
   "sphinx",
+  "rdkit",
 ]
 requires-python = ">=3.12"
 dynamic = ["version"]
-readme = "README.rst"
+readme = "README.md"
 description = "Make better chemistry documentation!"
 
 [dependency-groups]
@@ -23,6 +24,8 @@ dev = [
   "twine",
   "types-docutils",
   "furo",
+  "sphinx-copybutton",
+  "stk",
 ]
 
 [project.urls]

@@ -10,8 +10,6 @@
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
-from moldoc import molecule
-
 # -- Project information -----------------------------------------------------
 
 project = "moldoc-test"
@@ -27,10 +25,6 @@ author = "Lukas Turcani"
 extensions = [
     "moldoc",
 ]
-
-moldoc_default_molecule_config = molecule.MoleculeConfig(
-    background_color=molecule.Color(32, 32, 32),
-)
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ["_templates"]
