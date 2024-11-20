@@ -17,6 +17,8 @@ Welcome to moldoc's documentation!
 
     ⭐ If you like ``moldoc`` remember to give it a star! ⭐
 
+GitHub: https://github.com/lukasturcani/moldoc
+
 Introduction
 ------------
 
