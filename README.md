@@ -78,13 +78,6 @@ Note that the content in the `moldoc` directive is a just a Python script,
 which has to define a `moldoc_display_molecule` variable holding an `rdkit.Mol`
 object.
 
-> [!TIP]
-> You do not have to use an `rdkit` object if you don't want, you can
-  also define a
-  [moldoc.molecule.Molecule](https://moldoc.readthedocs.io/en/stable/_autosummary/moldoc.molecule.Molecule.html),
-  which simply takes a list of atoms, bonds and positions. See an example
-  [here](https://moldoc.readthedocs.io/en/stable/index.html#avoiding-rdkit).
-
 Because the content of a `moldoc` directive is just a Python script you can
 define your molecules programatically:
 

@@ -8,7 +8,6 @@ from sphinx.environment import BuildEnvironment
 from sphinx.util.docutils import SphinxDirective
 from sphinx.writers.html5 import HTML5Translator
 
-from moldoc._internal.molecule import Molecule
 from moldoc.version import __version__
 
 
@@ -16,7 +15,7 @@ class MolDocNode(nodes.Body, nodes.Element):
     def __init__(
         self,
         moldoc_name: str,
-        molecule: Chem.Mol | Molecule,
+        molecule: Chem.Mol,
         container: dict[str, str],
         script: str,
     ) -> None:
@@ -27,7 +26,7 @@ class MolDocNode(nodes.Body, nodes.Element):
         self.script = script
 
 
-DEFAULT_SCRIPT_RDKIT = """
+DEFAULT_SCRIPT = """
 let config = {
     backgroundAlpha: 0.0,
     backgroundColor: 'transparent',
@@ -40,13 +39,6 @@ viewer.zoomTo();
 viewer.render();
 """
 
-DEFAULT_SCRIPT_MOLECULE = """
-let config = {
-    backgroundAlpha: 0.0,
-    backgroundColor: 'transparent',
-};
-"""
-
 
 class MolDoc(SphinxDirective):
     has_content = True
@@ -56,26 +48,16 @@ class MolDoc(SphinxDirective):
         globals_: dict[str, typing.Any] = {}
         exec(content, globals_)  # noqa: S102
 
-        molecule = globals_["moldoc_display_molecule"]
-        default_script = DEFAULT_SCRIPT_RDKIT
-        match molecule:
-            case Chem.Mol():
-                pass
-            case Molecule():
-                default_script = DEFAULT_SCRIPT_MOLECULE
-            case unreachable:
-                typing.assert_never(unreachable)
-
         node = MolDocNode(
             moldoc_name=f'moldoc_{self.env.new_serialno("moldoc")}',
-            molecule=molecule,
+            molecule=globals_["moldoc_display_molecule"],
             container=globals_.get(
                 "moldoc_container_attributes",
                 {
                     "style": "width: 100%; height: 400px; position: relative;",
                 },
             ),
-            script=globals_.get("moldoc_script", default_script),
+            script=globals_.get("moldoc_script", DEFAULT_SCRIPT),
         )
 
         if not hasattr(self.env, "moldoc_documents"):
@@ -101,36 +83,19 @@ def html_moldoc(self: HTML5Translator, node: MolDocNode) -> None:
         self.moldoc_scripts_added = True
 
     attributes = _format_attributes(node.container)
-    match node.molecule:
-        case Chem.Mol():
-            molecule_sdf = Chem.MolToMolBlock(node.molecule, forceV3000=True)
-            self.body.append(
-                f'<div id="{node.moldoc_name}" {attributes}></div>'
-                "<script>{"
-                "const drawMol = () => {"
-                f"let element = document.querySelector('#{node.moldoc_name}');"
-                f"let data = `{molecule_sdf}`;"
-                f"{node.script}"
-                "};"
-                "if (typeof $3Dmol === 'undefined') { "
-                "moldoc_molecules.push(drawMol); } else { drawMol() }"
-                "}</script>"
-            )
-        case Molecule():
-            self.body.append(
-                f'<div id="{node.moldoc_name}" {attributes}></div>'
-                "<script>{"
-                "const drawMol = () => {"
-                f"let element = document.querySelector('#{node.moldoc_name}');"
-                f"let data = `{molecule_sdf}`;"
-                f"{node.script}"
-                "};"
-                "if (typeof $3Dmol === 'undefined') { "
-                "moldoc_molecules.push(drawMol); } else { drawMol() }"
-                "}</script>"
-            )
-        case unreachable:
-            typing.assert_never(unreachable)
+    molecule_sdf = Chem.MolToMolBlock(node.molecule, forceV3000=True)
+    self.body.append(
+        f'<div id="{node.moldoc_name}" {attributes}></div>'
+        "<script>{"
+        "const drawMol = () => {"
+        f"let element = document.querySelector('#{node.moldoc_name}');"
+        f"let data = `{molecule_sdf}`;"
+        f"{node.script}"
+        "};"
+        "if (typeof $3Dmol === 'undefined') { "
+        "moldoc_molecules.push(drawMol); } else { drawMol() }"
+        "}</script>"
+    )
     raise nodes.SkipNode
 
 

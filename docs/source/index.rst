@@ -11,7 +11,6 @@ Welcome to moldoc's documentation!
   :maxdepth: 2
   :caption: Contents:
 
-  Molecule <_autosummary/moldoc.molecule.Molecule>
   Modules <modules>
 
 .. tip::
@@ -113,12 +112,6 @@ or in your Python docstrings:
 Note that the content in the ``moldoc`` directive is a just a Python script,
 which has to define a ``moldoc_display_molecule`` variable holding an
 ``rdkit.Mol`` object.
-
-.. tip::
-
-    You do not have to define an ``rdkit`` object if you don't want, you can
-    also define a :class:`moldoc.molecule.Molecule`, which simply takes a list
-    of atoms, bonds and positions. See an example :ref:`here <avoiding-rdkit>`.
 
 .. _adding-molecules-into-your-docs-3:
 
@@ -224,57 +217,53 @@ directly. For example, this is how you enable auto-rotation:
         viewer.spin();
     """
 
-.. _avoiding-rdkit:
+.. _avoiding-valence-issues:
 
-Avoiding rdkit
-..............
+Avoiding valence issues
+.......................
 
-Sometimes you may want to avoid using ``rdkit`` because it has valence
-restrictions or it just does not fit your workflow. In those cases you can use
-:class:`moldoc.molecule.Molecule`, which simply holds a list atoms, bonds and
-their positions:
+Sometimes using ``rdkit`` may be inconvenient because it has valence
+restrictions. However valence restrictions in ``rdkit`` can be avoided
+by constructing the molecule manually:
 
 .. code-block:: rst
 
    .. moldoc::
 
-        from moldoc import molecule
-        moldoc_display_molecule = molecule.Molecule(
-            atoms=(
-                # molecule.Atom(atomic_number, position)
-                molecule.Atom(6, (-0.06, -0.17, 0.)),
-                molecule.Atom(17, (-1.35, 1.04, -0.04)),
-                molecule.Atom(35, (1.65, 0.73, -0.06)),
-                molecule.Atom(1, (-0.15, -0.88, -0.87)),
-                molecule.Atom(1, (-0.09, -0.72, 0.97)),
-            ),
-            bonds=(
-                # molecule.Bond(atom1_id, atom2_id, order)
-                molecule.Bond(0, 1, Simple(1)),
-                molecule.Bond(0, 2, Simple(1)),
-                molecule.Bond(0, 3, Simple(1)),
-                molecule.Bond(0, 4, Dative(1)),
-            ),
-        )
+        import rdkit.Chem.AllChem as rdkit
+        molecule = rdkit.EditableMol(rdkit.Mol())
+        # Make a Nitrogen with 5 bonds
+        molecule.AddAtom(rdkit.Atom("N"))
+        molecule.AddAtom(rdkit.Atom("C"))
+        molecule.AddAtom(rdkit.Atom("C"))
+        molecule.AddAtom(rdkit.Atom("C"))
+        molecule.AddAtom(rdkit.Atom("C"))
+        molecule.AddAtom(rdkit.Atom("C"))
+        molecule.AddBond(0, 1, rdkit.BondType.SINGLE)
+        molecule.AddBond(0, 2, rdkit.BondType.SINGLE)
+        molecule.AddBond(0, 3, rdkit.BondType.SINGLE)
+        molecule.AddBond(0, 4, rdkit.BondType.SINGLE)
+        molecule.AddBond(0, 5, rdkit.BondType.SINGLE)
+        moldoc_display_molecule = molecule.GetMol()
 
 .. moldoc::
 
-    from moldoc import molecule
-    moldoc_display_molecule = molecule.Molecule(
-        atoms=(
-            molecule.Atom(6, (-0.06, -0.17, 0.)),
-            molecule.Atom(17, (-1.35, 1.04, -0.04)),
-            molecule.Atom(35, (1.65, 0.73, -0.06)),
-            molecule.Atom(1, (-0.15, -0.88, -0.87)),
-            molecule.Atom(1, (-0.09, -0.72, 0.97)),
-        ),
-        bonds=(
-            molecule.Bond(0, 1, molecule.Simple(1)),
-            molecule.Bond(0, 2, molecule.Simple(1)),
-            molecule.Bond(0, 3, molecule.Simple(1)),
-            molecule.Bond(0, 4, molecule.Dative()),
-        ),
-    )
+    import rdkit.Chem.AllChem as rdkit
+    molecule = rdkit.EditableMol(rdkit.Mol())
+    # Make a Nitrogen with 5 bonds
+    molecule.AddAtom(rdkit.Atom("N"))
+    molecule.AddAtom(rdkit.Atom("C"))
+    molecule.AddAtom(rdkit.Atom("C"))
+    molecule.AddAtom(rdkit.Atom("C"))
+    molecule.AddAtom(rdkit.Atom("C"))
+    molecule.AddAtom(rdkit.Atom("C"))
+    molecule.AddBond(0, 1, rdkit.BondType.SINGLE)
+    molecule.AddBond(0, 2, rdkit.BondType.SINGLE)
+    molecule.AddBond(0, 3, rdkit.BondType.SINGLE)
+    molecule.AddBond(0, 4, rdkit.BondType.SINGLE)
+    molecule.AddBond(0, 5, rdkit.BondType.SINGLE)
+    moldoc_display_molecule = molecule.GetMol()
+
 
 Indices and tables
 ==================
